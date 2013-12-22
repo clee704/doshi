@@ -64,7 +64,7 @@ angular.module('doshi')
     };
 
     this.data = {
-      version: 10,
+      version: 0,
       courses: [],
       classes: [],
       inputTimetable: [],
