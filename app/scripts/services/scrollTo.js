@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('timetableJsApp')
+angular.module('doshi')
 
   // Scrolls the main window so that the element given by the specified selector
   // is shown.

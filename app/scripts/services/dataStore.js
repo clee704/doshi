@@ -1,7 +1,7 @@
 /* global range */
 'use strict';
 
-angular.module('timetableJsApp')
+angular.module('doshi')
   .service('dataStore', function () {
     this.numDays = 5;
     this.numPeriods = 7;

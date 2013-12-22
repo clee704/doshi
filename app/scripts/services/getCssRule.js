@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('timetableJsApp')
+angular.module('doshi')
 
   // Returns the first CSS rule that matches the given selector.
   // The current implementation is just good enough for the current usage of

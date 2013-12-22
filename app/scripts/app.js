@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('timetableJsApp', [
+angular.module('doshi', [
   'ngRoute',
   'ngAnimate'
 ])

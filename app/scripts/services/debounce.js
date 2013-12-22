@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('timetableJsApp')
+angular.module('doshi')
 
   // Merges consecutive calls occurring faster than the given rate and calls the
   // function only at the end of such series of calls.

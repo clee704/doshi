@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('timetableJsApp')
+angular.module('doshi')
 
   // Maximizes the height of elements with attribute `maximize-height` so that
   // they fill their parents vertically. If transition is true, apply 400ms

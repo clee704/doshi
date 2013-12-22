@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('timetableJsApp')
+angular.module('doshi')
 
   // Similar to ngClick, except that it is only triggered by enter key.
   .directive('ngEnter', function ($parse) {

@@ -1,7 +1,7 @@
 /* global map_obj */
 'use strict';
 
-angular.module('timetableJsApp')
+angular.module('doshi')
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('timetableJsApp')
+angular.module('doshi')
   .controller('TimesInputCtrl', function ($scope, dataStore) {
     $scope.page = $scope.getCurrentPage();
 

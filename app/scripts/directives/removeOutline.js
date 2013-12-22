@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('timetableJsApp')
+angular.module('doshi')
 
   // Remove ugly outline around button or link in FF and IE
   // when it is clicked by mouse.

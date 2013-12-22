@@ -5,7 +5,7 @@ describe('debounce', function () {
 
   var foo, wrappedFoo, tick;
 
-  beforeEach(module('timetableJsApp'));
+  beforeEach(module('doshi'));
   beforeEach(function () {
     var $timeout;
     foo = jasmine.createSpy('foo');

@@ -1,7 +1,7 @@
 /* global Problem, hill_climbing */
 'use strict';
 
-angular.module('timetableJsApp')
+angular.module('doshi')
   .controller('OutputCtrl', function ($scope, $timeout, dataStore, maximizeHeight, unmaximizeHeight) {
     $scope.page = $scope.getCurrentPage();
 
