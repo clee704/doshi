@@ -281,13 +281,15 @@ span.hidden-xs {
     border-bottom-width: 1px;
   }
   > tbody > tr > td {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding-left: ($table-cell-padding / 2) !important;
+    padding-right: ($table-cell-padding / 2) !important;
   }
   .course,
   .class {
     display: inline-block;
     margin: 1px 4px;
+    line-height: 1;
+    white-space: nowrap;
   }
   .classes {
     display: inline-block;
@@ -308,7 +310,7 @@ span.hidden-xs {
     // height is set to 100% by script
     td {
       border-bottom: 1px dotted lighten($table-border-color, 5%) !important;
-      padding: $table-cell-padding 0;
+      padding: $table-cell-padding ($table-cell-padding / 2);
     }
     tr:last-child td {
       border-bottom: 0 !important;
