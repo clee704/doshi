@@ -1,0 +1,43 @@
+<div class="alert alert-info hidden-print">
+  시작 버튼을 누르면 시간표 만들기를 시작합니다.
+  컴퓨터 사양에 따라 1분에서 5분 정도 걸릴 수 있습니다.
+</div>
+<div class="output-controls hidden-print">
+  <button class="btn btn-success" ng-click="start()" remove-outline>시작</button>
+</div>
+<div class="alert alert-warning" ng-if="inputChanged.value">
+  아래 시간표는 예전에 만들어진 것입니다. 시간표를 만들었을 당시의 설정값은 현재 설정값과 다를 수 있습니다.
+</div>
+<table class="table table-bordered timetable output-timetable">
+  <thead>
+    <tr>
+      <th></th>
+      <th>월</th>
+      <th>화</th>
+      <th>수</th>
+      <th>목</th>
+      <th>금</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="i in periodIndices">
+      <th>{{i + 1}}<span class="hidden-xs">교시</span></th>
+      <td ng-repeat="j in dayIndices">
+        <table class="course-classes" maximize-height>
+          <tr ng-repeat="assignment in timetable[j][i]">
+            <td>
+              <div class="course">{{assignment[0]}}</div>
+              <div class="classes">
+                <div class="class" ng-repeat="klass in assignment[1]">
+                  {{klass}}
+                </div>
+              </div>
+            </td>
+          </div>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div ng-include="'templates/pagination.html'"></div>
