@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('doshi')
-  .controller('OutputCtrl', function ($scope, $timeout, dataStore, maximizeHeight, unmaximizeHeight) {
+  .controller('OutputCtrl', function ($scope, $timeout, $window, dataStore, maximizeHeight, unmaximizeHeight) {
     $scope.page = $scope.getCurrentPage();
 
     $scope.timetable = dataStore.data.timetable;
@@ -20,7 +20,7 @@ angular.module('doshi')
       try {
         problem = new Problem(courses, classes, inputTimetable, maxClasses, courseHours);
       } catch (exception) {
-        alert(exception.message);
+        $window.alert(exception.message);
         return;
       }
       var fitness = hill_climbing(problem);

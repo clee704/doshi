@@ -89,7 +89,7 @@ angular.module('doshi')
         var cssRule = cssRules[isForward ? (isEnter ? 0 : 1) : (isEnter ? 2 : 3)];
         cssRule.style['-webkit-transform'] = translateText;
         cssRule.style['-ms-transform'] = translateText;
-        cssRule.style['transform'] = translateText;
+        cssRule.style.transform = translateText;
         done();
       };
     }
