@@ -37,11 +37,14 @@ angular.module('doshi')
     // Animate height from the current value to 0.
     // Note that it breaks after LiveReload reloads CSS files. Save this file
     // so that LiveReload reloads the entire page to make it work again.
-    var cssRule = getCssRule('.input-courses-and-classes .list-group-item:not(.empty).ng-leave');
+    var selector = '.input-courses-and-classes .list-group-item:not(.empty).ng-leave';
+    var cssRule = getCssRule(selector);
     return {
       leave: function (element, done) {
-        if (element.is(':not(.empty)') && cssRule) {
-          cssRule.style.height = element.height() + 'px';
+        if (element.is(':not(.empty)')) {
+          if (cssRule) {
+            cssRule.style.height = element.height() + 'px';
+          }
         }
         done();
       }

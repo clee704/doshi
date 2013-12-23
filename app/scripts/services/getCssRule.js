@@ -33,5 +33,6 @@ angular.module('doshi')
           }
         }
       }
+      console.log('CSS rule for `' + selector + '` not found');
     };
   });

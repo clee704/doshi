@@ -70,12 +70,13 @@ angular.module('doshi')
   })
 
   .animation('.view', ['getCssRule', function (getCssRule) {
-    var cssRules = [
-      getCssRule('.forward .view.ng-enter'),
-      getCssRule('.forward .view.ng-leave.ng-leave-active'),
-      getCssRule('.backward .view.ng-enter'),
-      getCssRule('.backward .view.ng-leave.ng-leave-active')
+    var selectors = [
+      '.forward .view.ng-enter',
+      '.forward .view.ng-leave.ng-leave-active',
+      '.backward .view.ng-enter',
+      '.backward .view.ng-leave.ng-leave-active'
     ];
+    var cssRules = selectors.map(getCssRule);
     function updateTranslateAmount(isEnter) {
       return function (element, done) {
         var isForward = element.parent().is('.forward');
@@ -86,10 +87,13 @@ angular.module('doshi')
         } else {
           translateText = 'translate(-' + translateAmount + 'px, 0)';
         }
-        var cssRule = cssRules[isForward ? (isEnter ? 0 : 1) : (isEnter ? 2 : 3)];
-        cssRule.style['-webkit-transform'] = translateText;
-        cssRule.style['-ms-transform'] = translateText;
-        cssRule.style.transform = translateText;
+        var index = isForward ? (isEnter ? 0 : 1) : (isEnter ? 2 : 3);
+        var cssRule = cssRules[index];
+        if (cssRule) {
+          cssRule.style['-webkit-transform'] = translateText;
+          cssRule.style['-ms-transform'] = translateText;
+          cssRule.style.transform = translateText;
+        }
         done();
       };
     }
