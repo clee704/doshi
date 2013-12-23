@@ -58,18 +58,18 @@
   <script src="bower_components/angular/angular.js"></script>
 
     <!-- build:js scripts/plugins.js -->
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/fastclick/lib/fastclick.js"></script>
     <!-- endbuild -->
 
-    <!-- build:js scripts/modules.js -->
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <!-- endbuild -->
-
-    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <!-- build:js({.tmp,app}) scripts/lib.js -->
     <script src="scripts/lib/util.js"></script>
     <script src="scripts/lib/algorithm.js"></script>
     <script src="scripts/lib/problem.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/inputStep1.js"></script>
     <script src="scripts/controllers/inputStep2.js"></script>
