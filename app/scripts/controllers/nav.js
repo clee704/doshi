@@ -69,7 +69,7 @@ angular.module('doshi')
     };
   })
 
-  .animation('.view', function (getCssRule) {
+  .animation('.view', ['getCssRule', function (getCssRule) {
     var cssRules = [
       getCssRule('.forward .view.ng-enter'),
       getCssRule('.forward .view.ng-leave.ng-leave-active'),
@@ -97,4 +97,4 @@ angular.module('doshi')
       enter: updateTranslateAmount(true),
       leave: updateTranslateAmount(false)
     };
-  });
+  }]);

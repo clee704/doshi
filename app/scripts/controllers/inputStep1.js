@@ -33,7 +33,7 @@ angular.module('doshi')
     $scope.$watch('classes', dataStore.onDataChange, true);
   })
 
-  .animation('.list-group-item', function (getCssRule) {
+  .animation('.list-group-item', ['getCssRule', function (getCssRule) {
     // Animate height from the current value to 0.
     // Note that it breaks after LiveReload reloads CSS files. Save this file
     // so that LiveReload reloads the entire page to make it work again.
@@ -46,4 +46,4 @@ angular.module('doshi')
         done();
       }
     };
-  });
+  }]);
