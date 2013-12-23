@@ -103,18 +103,21 @@ span.hidden-xs {
       @include translate(-1px, 0);
     }
   }
+  // Don't change the order of rules.
+  // .forward .view.ng-leave.ng-leave-active and .backward .view.ng-enter
+  // should not be merged (cssmin merges them if they are adjacent to each other).
   .backward & {
-    &.ng-enter {
-      @include translate(-1px, 0);
-    }
-    &.ng-enter.ng-enter-active {
-      @include translate(0, 0);
-    }
     &.ng-leave {
       @include translate(0, 0);
     }
     &.ng-leave.ng-leave-active {
       @include translate(1px, 0);
+    }
+    &.ng-enter {
+      @include translate(-1px, 0);
+    }
+    &.ng-enter.ng-enter-active {
+      @include translate(0, 0);
     }
   }
 }
