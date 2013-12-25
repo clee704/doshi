@@ -31,7 +31,7 @@ describe('problem', function () {
         courses: ['Math'],
         classes: ['1-1', '1-2', '1-3'],
         inputTimetable: [[[['1-1', '1-2', '1-3']]]],
-        maximumClasses: 2
+        maxClasses: 2
       });
     }).toThrow();
   });

@@ -10,7 +10,7 @@ function Problem(args) {
   this.classes = args.classes;                // 1-1, 2-7, 3-4, ...
   this.days = [0, 1, 2, 3, 4];                // Monday to Friday
   this.inputTimetable = args.inputTimetable;  // Which class should be given a course when
-  this.maximumClasses = args.maximumClasses || this.classes.length;
+  this.maxClasses = args.maxClasses || this.classes.length;
                                               // Maximum number of classes for a course at a time
   this.courseHours = args.courseHours;        // Target hours for courses
 
@@ -54,7 +54,7 @@ Problem.prototype._makeTimeAllocs = function () {
       availableCourses = this.courses;
     }
     var temp = [];
-    var classPartitions = setPartitions(availableClasses, this.maximumClasses);
+    var classPartitions = setPartitions(availableClasses, this.maxClasses);
     for (var j = 0; j < classPartitions.length; j++) {
       var classes = classPartitions[j];
       if (availableCourses.length < classes.length) {
