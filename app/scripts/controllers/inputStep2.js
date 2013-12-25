@@ -1,12 +1,10 @@
 'use strict';
 
 angular.module('doshi')
-  .controller('TimesInputCtrl', function ($scope, dataStore) {
+  .controller('TimesInputCtrl', function ($scope, appData, appService) {
     $scope.page = $scope.getCurrentPage();
-
-    $scope.inputTimetable = dataStore.data.inputTimetable;
-    $scope.dayIndices = dataStore.dayIndices;
-    $scope.periodIndices = dataStore.periodIndices;
-
-    $scope.$watch('inputTimetable', dataStore.onDataChange, true);
+    $scope.dayIndices = appService.dayIndices;
+    $scope.periodIndices = appService.periodIndices;
+    $scope.appData = appData;
+    $scope.$watch('appData.inputTimetable', appService.onDataChange, true);
   });

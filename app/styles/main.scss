@@ -2,8 +2,10 @@ $font-family-sans-serif: "Apple SD Gothic Neo", NanumGothic, "나눔고딕", "�
 $font-size-base: 14px;
 $font-size-h1: floor($font-size-base * 1.3) !default; // ~18px
 $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
-
 @import 'sass-bootstrap/lib/bootstrap';
+
+$fa-font-path: "/bower_components/font-awesome/fonts/";
+@import 'font-awesome/scss/font-awesome';
 
 body {
   padding: 20px 0;
@@ -31,6 +33,12 @@ label {
 .btn-link {
   &:hover {
     text-decoration: none;
+  }
+}
+
+.progress-bar {
+  &.transition-disabled {
+    @include transition(none);
   }
 }
 
@@ -323,4 +331,7 @@ span.hidden-xs {
 
 .output-controls {
   margin-bottom: $line-height-computed;
+  .fa-spinner {
+    margin-left: 10px;
+  }
 }

@@ -1,14 +1,10 @@
 'use strict';
 
 angular.module('doshi')
-  .controller('EtcInputCtrl', function ($scope, dataStore) {
+  .controller('EtcInputCtrl', function ($scope, appData, appService) {
     $scope.page = $scope.getCurrentPage();
-
-    $scope.maxClasses = dataStore.data.maxClasses;
-    $scope.courseHours = dataStore.data.courseHours;
-    $scope.courseHoursByCourse = dataStore.data.courseHoursByCourse;
-
-    $scope.$watch('maxClasses.value', dataStore.onDataChange);
-    $scope.$watch('courseHours.value', dataStore.onDataChange);
-    $scope.$watch('courseHoursByCourse', dataStore.onDataChange, true);
+    $scope.appData = appData;
+    $scope.$watch('appData.maxClasses', appService.onDataChange);
+    $scope.$watch('appData.courseHours', appService.onDataChange);
+    $scope.$watch('appData.courseHoursByCourse', appService.onDataChange, true);
   });

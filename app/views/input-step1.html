@@ -22,7 +22,7 @@
       <div class="form-group">
         <div class="col-sm-12">
           <ul class="list-group">
-            <li class="list-group-item" ng-repeat="course in courses">
+            <li class="list-group-item" ng-repeat="course in appData.courses">
               <div class="list-group-item-inner">
                 {{course}}
                 <button type="button" class="close" ng-click="removeCourse(course)" remove-outline>
@@ -30,7 +30,7 @@
                 </button>
               </div>
             </li>
-            <li class="list-group-item empty text-muted" ng-if="!courses.length">
+            <li class="list-group-item empty text-muted" ng-if="!appData.courses.length">
               <div class="list-group-item-inner">
                 입력된 교과목이 없습니다.
               </div>
@@ -58,7 +58,7 @@
       <div class="form-group">
         <div class="col-sm-12">
           <ul class="list-group">
-            <li class="list-group-item" ng-repeat="klass in classes">
+            <li class="list-group-item" ng-repeat="klass in appData.classes">
               <div class="list-group-item-inner">
                 {{klass}}
                 <button type="button" class="close" ng-click="removeClass(klass)" remove-outline>
@@ -66,7 +66,7 @@
                 </button>
               </div>
             </li>
-            <li class="list-group-item empty text-muted" ng-if="!classes.length">
+            <li class="list-group-item empty text-muted" ng-if="!appData.classes.length">
               <div class="list-group-item-inner">
                 입력된 반이 없습니다.
               </div>

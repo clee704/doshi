@@ -1,36 +1,34 @@
 'use strict';
 
 angular.module('doshi')
-  .controller('CoursesAndClassesInputCtrl', function ($scope, dataStore) {
+  .controller('CoursesAndClassesInputCtrl', function ($scope, appData, appService) {
     $scope.page = $scope.getCurrentPage();
-
-    $scope.courses = dataStore.data.courses;
-    $scope.classes = dataStore.data.classes;
+    $scope.appData = appData;
 
     $scope.loadExample = function () {
-      dataStore.loadExample();
+      appService.loadExample();
     };
 
     $scope.addCourse = function () {
-      dataStore.addCourse($scope.newCourse);
+      appService.addCourse($scope.newCourse);
       $scope.newCourse = '';
     };
 
     $scope.removeCourse = function (course) {
-      dataStore.removeCourse(course);
+      appService.removeCourse(course);
     };
 
     $scope.addClass = function () {
-      dataStore.addClass($scope.newClass);
+      appService.addClass($scope.newClass);
       $scope.newClass = '';
     };
 
     $scope.removeClass = function (klass) {
-      dataStore.removeClass(klass);
+      appService.removeClass(klass);
     };
 
-    $scope.$watch('courses', dataStore.onDataChange, true);
-    $scope.$watch('classes', dataStore.onDataChange, true);
+    $scope.$watch('appData.courses', appService.onDataChange, true);
+    $scope.$watch('appData.classes', appService.onDataChange, true);
   })
 
   .animation('.list-group-item', ['getCssRule', function (getCssRule) {

@@ -1,6 +1,6 @@
 /* exported swap, range, map_obj, obj_values, obj_map, zip, set_partitions,
             sort_partitions, permutations, square, sum, variance, randint,
-            shuffle */
+            shuffle, is_deep_empty */
 'use strict';
 
 
@@ -212,4 +212,21 @@ function shuffle(array) {
   //   var j = randint(0, array.length - 1);
   //   swap(array, i, j);
   // }
+}
+
+
+function is_deep_empty(array) {
+  for (var i = 0; i < array.length; i++) {
+    var element = array[i];
+    if (element instanceof Array) {
+      if (!is_deep_empty(element)) {
+        return false;
+      } else {
+        continue;
+      }
+    } else if (element) {
+      return false;
+    }
+  }
+  return true;
 }

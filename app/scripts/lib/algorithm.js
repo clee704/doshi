@@ -1,3 +1,4 @@
+/* global shuffle */
 /* exported hill_climbing */
 'use strict';
 
@@ -8,11 +9,12 @@ function hill_climbing(problem) {
   while (true) {
     best_move = undefined;
     var moves = problem.moves();
+    shuffle(moves);
     for (var i = 0; i < moves.length; i++) {
       var move = moves[i];
       problem.move(move);
       var fitness = problem.evaluate();
-      if (fitness < min_fitness) {
+      if (problem.compare_fitness(fitness, min_fitness) < 0) {
         min_fitness = fitness;
         best_move = move;
       }

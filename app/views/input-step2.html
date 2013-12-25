@@ -15,7 +15,7 @@
   <tbody>
     <tr ng-repeat="i in periodIndices">
       <th>{{i + 1}}<span class="hidden-xs">교시</span></th>
-      <td ng-repeat="j in dayIndices" ng-init="timeInfo = inputTimetable[j][i]">
+      <td ng-repeat="j in dayIndices" ng-init="timeInfo = appData.inputTimetable[j][i]">
         <div class="classes">
           <div class="class" ng-repeat="klass in timeInfo[0]">{{klass}}</div>
         </div>

@@ -1,40 +1,22 @@
-/* global Problem, hill_climbing */
 'use strict';
 
 angular.module('doshi')
-  .controller('OutputCtrl', function ($scope, $timeout, $window, dataStore, maximizeHeight, unmaximizeHeight) {
+  .controller('OutputCtrl', function ($scope, appData, appService) {
     $scope.page = $scope.getCurrentPage();
-
-    $scope.timetable = dataStore.data.timetable;
-    $scope.inputChanged = dataStore.data.inputChanged;
-    $scope.dayIndices = dataStore.dayIndices;
-    $scope.periodIndices = dataStore.periodIndices;
+    $scope.dayIndices = appService.dayIndices;
+    $scope.periodIndices = appService.periodIndices;
+    $scope.appData = appData;
+    $scope.status = appService.status;
 
     $scope.start = function () {
-      var courses = dataStore.data.courses;
-      var classes = dataStore.data.classes;
-      var inputTimetable = dataStore.data.inputTimetable;
-      var maxClasses = dataStore.data.maxClasses.value;
-      var courseHours = dataStore.data.courseHours.value;
-      var problem;
-      try {
-        problem = new Problem(courses, classes, inputTimetable, maxClasses, courseHours);
-      } catch (exception) {
-        $window.alert(exception.message);
-        return;
-      }
-      var fitness = hill_climbing(problem);
-      console.log(fitness);
-      unmaximizeHeight();
-      angular.copy(problem.get_timetable(), $scope.timetable);
-      dataStore.save();
-      $scope.inputChanged.value = false;
-      growInnerTables();
+      appService.start();
     };
 
-    function growInnerTables() {
-      var hasManyRows = function (element) { return element.find('tr').length > 1; };
-      $timeout(function () { maximizeHeight(true, hasManyRows); });
-    }
-    growInnerTables();
+    $scope.pause = function () {
+      appService.pause();
+    };
+
+    $scope.resume = function () {
+      appService.resume();
+    };
   });

@@ -203,8 +203,29 @@ module.exports = function (grunt) {
     usemin: {
       html: ['<%= yeoman.dist %>/{,*/}*.html'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+      js: [
+        '<%= yeoman.dist %>/scripts/{,*/}*.js',
+        '!<%= yeoman.dist %>/scripts/*worker.js'
+      ],
+      worker: ['<%= yeoman.dist %>/scripts/*worker.js'],
       options: {
-        assetsDirs: ['<%= yeoman.dist %>']
+        assetsDirs: ['<%= yeoman.dist %>'],
+        patterns: {
+          js: [
+            [
+              /Worker\(['"]([^'"]+.js)['"]\)/,
+              'Replacing reference to Worker URLs'
+            ]
+          ],
+          worker: [
+            [
+              /importScripts\(['"]([^'"]+\.js)['"]\)/,
+              'Replacing reference to lib.js',
+              function (m) { return 'scripts/' + m; },
+              function (m) { return m.replace(/^scripts\//, ''); }
+            ]
+          ]
+        }
       }
     },
 

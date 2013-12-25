@@ -4,15 +4,15 @@
 'use strict';
 
 
-function Problem(courses, classes, input_timetable, maximum_classes, course_hours) {
+function Problem(args) {
   // Input
-  this.courses = courses;                  // Math, History, Science, ...
-  this.classes = classes;                  // 1-1, 2-7, 3-4, ...
-  this.days = [0, 1, 2, 3, 4];             // Monday to Friday
-  this.input_timetable = input_timetable;  // Which class should be given a course when
-  this.maximum_classes = maximum_classes || this.classes.length;
-                                           // Maximum number of classes for a course at a time
-  this.course_hours = course_hours;        // Target hours for courses
+  this.courses = args.courses;                  // Math, History, Science, ...
+  this.classes = args.classes;                  // 1-1, 2-7, 3-4, ...
+  this.days = [0, 1, 2, 3, 4];                  // Monday to Friday
+  this.input_timetable = args.input_timetable;  // Which class should be given a course when
+  this.maximum_classes = args.maximum_classes || this.classes.length;
+                                                // Maximum number of classes for a course at a time
+  this.course_hours = args.course_hours;        // Target hours for courses
 
   // Output
   this.timetable = [];
@@ -178,6 +178,27 @@ Problem.prototype.evaluate = function () {
   ];
 };
 
+Problem.prototype.compare_fitness = function (a, b) {
+  var x, y;
+  x = a[0];
+  y = b[0];
+  if (x < y) return -1;
+  else if (x > y) return 1;
+  x = a[1];
+  y = b[1];
+  if (x < y) return -1;
+  else if (x > y) return 1;
+  x = a[2];
+  y = b[2];
+  if (x < y) return -1;
+  else if (x > y) return 1;
+  x = a[3];
+  y = b[3];
+  if (x < y) return -1;
+  else if (x > y) return 1;
+  return 0;
+};
+
 Problem.prototype.moves = function (do_shuffle) {
   var moves = [];
   for (var time_index = 0; time_index < this._available_times.length; time_index++) {
@@ -207,7 +228,7 @@ Problem.prototype.undo = function () {
   this._set_slot(time_index, alloc_index);
 };
 
-Problem.prototype.get_timetable = function () {
+Problem.prototype.convert_timetable = function (timetable) {
   var ret = [];
   for (var c = 0; c < this.days.length; c++) {
     var column = [];
@@ -218,7 +239,7 @@ Problem.prototype.get_timetable = function () {
     var time_info = this._available_times[i];
     var day = time_info[0];
     var period = time_info[1];
-    var alloc = this._time_allocs[i][this.timetable[i]];
+    var alloc = this._time_allocs[i][timetable[i]];
     ret[day][period] = alloc;
   }
   return ret;

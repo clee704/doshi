@@ -5,7 +5,7 @@ angular.module('doshi')
   // Returns the first CSS rule that matches the given selector.
   // The current implementation is just good enough for the current usage of
   // this function in this app. For example, it doesn't look into media rules,
-  // so any rules that in media queres are not considered.
+  // so any rules that in media queries are not considered.
   .factory('getCssRule', function ($window) {
     var styleElement = $window.document.createElement('style');
     $window.document.head.appendChild(styleElement);
@@ -27,6 +27,8 @@ angular.module('doshi')
         var rules = stylesheet.cssRules;
         for (var j = 0; j < rules.length; j++) {
           var rule = rules[j];
+          // For the implementation to be more complete,
+          // it should look into MEDIA_RULE.
           if (rule.type !== CSSRule.STYLE_RULE) continue;
           if (rule.selectorText === selector) {
             return rule;

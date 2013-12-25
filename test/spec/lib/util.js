@@ -1,6 +1,6 @@
 /* global swap, range, map_obj, obj_values, obj_map, zip, set_partitions,
           sort_partitions, permutations, square, sum, variance, randint,
-          shuffle */
+          shuffle, is_deep_empty */
 'use strict';
 
 
@@ -190,6 +190,20 @@ describe('util', function () {
       var std = Math.sqrt(variance(counter));
       // console.log(counter, std);
       expect(std).toBeLessThan(1000, 'Don\'t panic! In a very rare case, it could fail. If you see this message often, however, it could mean your shuffle algorithm is broken.');
+    });
+  });
+
+  describe('is_deep_empty', function () {
+    it('should return true for nested empty arrays', function () {
+      expect(is_deep_empty([])).toBeTruthy();
+      expect(is_deep_empty([[]])).toBeTruthy();
+      expect(is_deep_empty([[], [[], []]])).toBeTruthy();
+    });
+    it('should return false for non nested empty arrays', function () {
+      expect(is_deep_empty([1])).toBeFalsy();
+      expect(is_deep_empty([[1]])).toBeFalsy();
+      expect(is_deep_empty([[], [[], [1]]])).toBeFalsy();
+      expect(is_deep_empty(['1'])).toBeFalsy();
     });
   });
 

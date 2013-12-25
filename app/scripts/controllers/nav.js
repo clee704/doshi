@@ -55,11 +55,16 @@ angular.module('doshi')
     })();
 
     $scope.$on('$locationChangeSuccess', function () {
+      // Determine the direction for slide animation.
       var path = $location.path();
       var i = pageIndicesByPath[previousPath];
       var j = pageIndicesByPath[path];
       $scope.pageTransitionDirection = i === undefined || i <= j ? 'forward' : 'backward';
+
+      // Scroll so that the top of the slide is shown.
       scrollTo('.view-wrapper');
+
+      // Set variables.
       previousPath = path;
       $scope.path = path;
     });
