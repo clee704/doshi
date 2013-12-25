@@ -13,10 +13,10 @@ angular.module('doshi')
             now = time();
         if (lastFired === undefined || lastFired + rate > now) {
           if (timerId !== undefined) $timeout.cancel(timerId);
-          timerId = $timeout(function () { run.apply(null, args); }, rate);
+          timerId = $timeout(function () { run.apply(undefined, args); }, rate);
           lastFired = now;
         } else {
-          fn.apply(null, args);
+          fn.apply(undefined, args);
           lastFired = undefined;
         }
       }
