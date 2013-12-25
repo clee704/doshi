@@ -1,27 +1,27 @@
 /* global shuffle */
-/* exported hill_climbing */
+/* exported hillClimbing */
 'use strict';
 
 
-function hill_climbing(problem) {
-  var min_fitness = problem.evaluate();
-  var best_move;
+function hillClimbing(problem) {
+  var minFitness = problem.evaluate();
+  var bestMove;
   while (true) {
-    best_move = undefined;
+    bestMove = undefined;
     var moves = problem.moves();
     shuffle(moves);
     for (var i = 0; i < moves.length; i++) {
       var move = moves[i];
       problem.move(move);
       var fitness = problem.evaluate();
-      if (problem.compare_fitness(fitness, min_fitness) < 0) {
-        min_fitness = fitness;
-        best_move = move;
+      if (problem.compareFitness(fitness, minFitness) < 0) {
+        minFitness = fitness;
+        bestMove = move;
       }
       problem.undo();
     }
-    if (best_move === undefined) break;
-    problem.move(best_move);
+    if (bestMove === undefined) break;
+    problem.move(bestMove);
   }
-  return min_fitness;
+  return minFitness;
 }

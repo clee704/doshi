@@ -1,6 +1,6 @@
-/* exported swap, range, map_obj, obj_values, obj_map, zip, set_partitions,
-            sort_partitions, permutations, square, sum, variance, randint,
-            shuffle, is_deep_empty */
+/* exported swap, range, mapObj, objValues, objMap, zip, setPartitions,
+            sortPartitions, permutations, square, sum, variance, randint,
+            shuffle, isDeepEmpty */
 'use strict';
 
 
@@ -11,12 +11,12 @@ function swap(array, i, j) {
 }
 
 
-function range(start_or_stop, stop, step) {
+function range(startOrStop, stop, step) {
   var start = 0;
   if (stop === undefined) {
-    stop = start_or_stop;
+    stop = startOrStop;
   } else {
-    start = start_or_stop;
+    start = startOrStop;
   }
   if (step === undefined) step = 1;
   if (step === 0) throw new RangeError('range() step argument must not be zero');
@@ -35,7 +35,7 @@ function range(start_or_stop, stop, step) {
 }
 
 
-function map_obj(array, func) {
+function mapObj(array, func) {
   var obj = {};
   for (var i = 0; i < array.length; i++) {
     var key = array[i];
@@ -46,7 +46,7 @@ function map_obj(array, func) {
 }
 
 
-function obj_values(obj) {
+function objValues(obj) {
   var ret = [];
   for (var key in obj) {
     if (!obj.hasOwnProperty(key)) continue;
@@ -56,7 +56,7 @@ function obj_values(obj) {
 }
 
 
-function obj_map(obj, func) {
+function objMap(obj, func) {
   var ret = [];
   for (var key in obj) {
     if (!obj.hasOwnProperty(key)) continue;
@@ -76,12 +76,12 @@ function zip(array1, array2) {
 }
 
 
-function set_partitions(set, maximum_subset_size) {
-  var partitions = _set_partitions(set);
-  if (maximum_subset_size !== undefined) {
+function setPartitions(set, maximumSubsetSize) {
+  var partitions = _setPartitions(set);
+  if (maximumSubsetSize !== undefined) {
     partitions = partitions.filter(function (partition) {
       for (var i = 0; i < partition.length; i++) {
-        if (partition[i].length > maximum_subset_size) return false;
+        if (partition[i].length > maximumSubsetSize) return false;
       }
       return true;
     });
@@ -90,21 +90,21 @@ function set_partitions(set, maximum_subset_size) {
 }
 
 
-function _set_partitions(set) {
+function _setPartitions(set) {
   if (set.length === 1) {
     return [[set]];
   } else {
-    var set_copy = set.slice();
-    var head = set_copy.splice(-1);
-    var tail = set_copy;
-    var partitions = _set_partitions(tail);
+    var setCopy = set.slice();
+    var head = setCopy.splice(-1);
+    var tail = setCopy;
+    var partitions = _setPartitions(tail);
     var ret = [];
     for (var i = 0; i < partitions.length; i++) {
       var partition = partitions[i];
       for (var j = 0; j < partition.length; j++) {
-        var partition_copy = partition.slice();
-        var subset = partition_copy.splice(j, 1)[0];
-        var others = partition_copy;
+        var partitionCopy = partition.slice();
+        var subset = partitionCopy.splice(j, 1)[0];
+        var others = partitionCopy;
         ret.push(others.concat([subset.concat(head)]));
       }
       ret.push(partition.concat([head]));
@@ -114,17 +114,17 @@ function _set_partitions(set) {
 }
 
 
-function sort_partitions(partitions) {
+function sortPartitions(partitions) {
   for (var i = 0; i < partitions.length; i++) {
     var partition = partitions[i];
-    partition.sort(_compare_subsets);
+    partition.sort(_compareSubsets);
   }
-  partitions.sort(_compare_partitions);
+  partitions.sort(_comparePartitions);
   return partitions;
 }
 
 
-function _compare_subsets(s1, s2) {
+function _compareSubsets(s1, s2) {
   var d = s1.length - s2.length;
   if (d) return d;
   if (s1 < s2) return -1;
@@ -133,11 +133,11 @@ function _compare_subsets(s1, s2) {
 }
 
 
-function _compare_partitions(p1, p2) {
+function _comparePartitions(p1, p2) {
   var d = p1.length - p2.length;
   if (d) return -d;
   for (var i = 0; i < p1.length; i++) {
-    d = _compare_subsets(p1[i], p2[i]);
+    d = _compareSubsets(p1[i], p2[i]);
     if (d) return d;
   }
   return 0;
@@ -160,8 +160,8 @@ function permutations(array, size) {
     for (var i = size - 1; i >= 0; i--) {
       cycles[i] -= 1;
       if (cycles[i] === 0) {
-        var index_at_i = indices.splice(i, 1);
-        indices.push(index_at_i);
+        var ithIndex = indices.splice(i, 1);
+        indices.push(ithIndex);
         cycles[i] = n - i;
       } else {
         var j = cycles[i];
@@ -215,11 +215,11 @@ function shuffle(array) {
 }
 
 
-function is_deep_empty(array) {
+function isDeepEmpty(array) {
   for (var i = 0; i < array.length; i++) {
     var element = array[i];
     if (element instanceof Array) {
-      if (!is_deep_empty(element)) {
+      if (!isDeepEmpty(element)) {
         return false;
       } else {
         continue;

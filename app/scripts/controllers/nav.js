@@ -1,4 +1,4 @@
-/* global map_obj */
+/* global mapObj */
 'use strict';
 
 angular.module('doshi')
@@ -39,8 +39,8 @@ angular.module('doshi')
     $scope.pageTransitionDirection = 'forward';
 
     var previousPath;
-    var pageIndicesByPath = map_obj($scope.pages.map(function (page) { return page.path; }),
-                                    function (path, i) { return i; });
+    var pageIndicesByPath = mapObj($scope.pages.map(function (page) { return page.path; }),
+                                   function (path, i) { return i; });
 
     (function linkAdjacentPages() {
       for (var i = 0; i < $scope.pages.length; i++) {

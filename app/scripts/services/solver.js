@@ -28,9 +28,9 @@ angular.module('doshi')
       var args = {
         courses: appData.courses,
         classes: appData.classes,
-        input_timetable: appData.inputTimetable,
-        max_classes: appData.maxClasses,
-        course_hours: appData.courseHours
+        inputTimetable: appData.inputTimetable,
+        maxClasses: appData.maxClasses,
+        courseHours: appData.courseHours
       };
       try {
         this.problem = new Problem(args);
@@ -88,7 +88,7 @@ angular.module('doshi')
     // Methods called by workers.
     Solver.prototype.onResult = function (fitness, timetable) {
       this._numSolved += 1;
-      if (this._minFitness === null || this.problem.compare_fitness(fitness, this._minFitness) < 0) {
+      if (this._minFitness === null || this.problem.compareFitness(fitness, this._minFitness) < 0) {
         this._minFitness = fitness;
         this._bestTimetable = timetable;
         this._debug();
@@ -97,7 +97,7 @@ angular.module('doshi')
       if (this._numSolved === this._numMaxRun) {
         this._pause();
         this._callback('solutionfound', this._minFitness,
-            this.problem.convert_timetable(this._bestTimetable));
+            this.problem.convertTimetable(this._bestTimetable));
         this._debug();
       }
     };

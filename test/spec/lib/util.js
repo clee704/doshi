@@ -1,6 +1,6 @@
-/* global swap, range, map_obj, obj_values, obj_map, zip, set_partitions,
-          sort_partitions, permutations, square, sum, variance, randint,
-          shuffle, is_deep_empty */
+/* global swap, range, mapObj, objValues, objMap, zip, setPartitions,
+          sortPartitions, permutations, square, sum, variance, randint,
+          shuffle, isDeepEmpty */
 'use strict';
 
 
@@ -32,16 +32,16 @@ describe('util', function () {
     });
   });
 
-  describe('map_obj', function () {
+  describe('mapObj', function () {
     it('should return an object that maps each element in array to the return value of func', function () {
-      expect(map_obj(['dog', 'cat', 'penguin'], function () { return 0; })).toEqual({
+      expect(mapObj(['dog', 'cat', 'penguin'], function () { return 0; })).toEqual({
         dog: 0,
         cat: 0,
         penguin: 0
       });
     });
     it('should pass each element and its index to func', function () {
-      expect(map_obj(['dog', 'cat', 'penguin'], function (animal, index) {
+      expect(mapObj(['dog', 'cat', 'penguin'], function (animal, index) {
         return animal + ' is at ' + index;
       })).toEqual({
         dog: 'dog is at 0',
@@ -50,20 +50,20 @@ describe('util', function () {
       });
     });
     it('should return an empty object when array is empty', function () {
-      expect(map_obj([], function () { return 0; })).toEqual([]);
+      expect(mapObj([], function () { return 0; })).toEqual([]);
     });
   });
 
-  describe('obj_values', function () {
+  describe('objValues', function () {
     it('should return the property values of an object', function () {
-      expect(obj_values({a: 2, b: 3, c: 4}).sort()).toEqual([2, 3, 4]);
+      expect(objValues({a: 2, b: 3, c: 4}).sort()).toEqual([2, 3, 4]);
     });
   });
 
-  describe('obj_map', function () {
+  describe('objMap', function () {
     it('should return an array that maps each property of an object to the return value of func', function () {
       var obj = {a: 1, b: 2, c: 3};
-      expect(obj_map(obj, function (key) { return key; }).sort()).toEqual(['a', 'b', 'c']);
+      expect(objMap(obj, function (key) { return key; }).sort()).toEqual(['a', 'b', 'c']);
     });
   });
 
@@ -77,18 +77,18 @@ describe('util', function () {
     });
   });
 
-  describe('set_partitions', function () {
+  describe('setPartitions', function () {
     it('should partition elements into subsets in every possible way', function () {
-      expect(set_partitions([1])).toEqual([[[1]]]);
-      expect(sort_partitions(set_partitions([1, 2]))).toEqual([[[1], [2]], [[1, 2]]]);
-      expect(sort_partitions(set_partitions([1, 2, 3]))).toEqual([
+      expect(setPartitions([1])).toEqual([[[1]]]);
+      expect(sortPartitions(setPartitions([1, 2]))).toEqual([[[1], [2]], [[1, 2]]]);
+      expect(sortPartitions(setPartitions([1, 2, 3]))).toEqual([
         [[1], [2], [3]],
         [[1], [2, 3]],
         [[2], [1, 3]],
         [[3], [1, 2]],
         [[1, 2, 3]]
       ]);
-      expect(sort_partitions(set_partitions([1, 2, 3, 4]))).toEqual([
+      expect(sortPartitions(setPartitions([1, 2, 3, 4]))).toEqual([
         [[1], [2], [3], [4]],
         [[1], [2], [3, 4]],
         [[1], [3], [2, 4]],
@@ -107,7 +107,7 @@ describe('util', function () {
       ]);
     });
     it('should filter partitions with large subsets', function () {
-      expect(sort_partitions(set_partitions([1, 2, 3, 4], 2))).toEqual([
+      expect(sortPartitions(setPartitions([1, 2, 3, 4], 2))).toEqual([
         [[1], [2], [3], [4]],
         [[1], [2], [3, 4]],
         [[1], [3], [2, 4]],
@@ -193,17 +193,17 @@ describe('util', function () {
     });
   });
 
-  describe('is_deep_empty', function () {
+  describe('isDeepEmpty', function () {
     it('should return true for nested empty arrays', function () {
-      expect(is_deep_empty([])).toBeTruthy();
-      expect(is_deep_empty([[]])).toBeTruthy();
-      expect(is_deep_empty([[], [[], []]])).toBeTruthy();
+      expect(isDeepEmpty([])).toBeTruthy();
+      expect(isDeepEmpty([[]])).toBeTruthy();
+      expect(isDeepEmpty([[], [[], []]])).toBeTruthy();
     });
     it('should return false for non nested empty arrays', function () {
-      expect(is_deep_empty([1])).toBeFalsy();
-      expect(is_deep_empty([[1]])).toBeFalsy();
-      expect(is_deep_empty([[], [[], [1]]])).toBeFalsy();
-      expect(is_deep_empty(['1'])).toBeFalsy();
+      expect(isDeepEmpty([1])).toBeFalsy();
+      expect(isDeepEmpty([[1]])).toBeFalsy();
+      expect(isDeepEmpty([[], [[], [1]]])).toBeFalsy();
+      expect(isDeepEmpty(['1'])).toBeFalsy();
     });
   });
 

@@ -1,4 +1,4 @@
-/* global addEventListener, postMessage, importScripts, Problem, hill_climbing */
+/* global addEventListener, postMessage, importScripts, Problem, hillClimbing */
 'use strict';
 
 
@@ -16,8 +16,8 @@ DoshiWorker.prototype.start = function () {
   this.paused = false;
   var loop = function () {
     if (!this.paused) {
-      this.problem.init_random();
-      var fitness = hill_climbing(this.problem);
+      this.problem.initRandom();
+      var fitness = hillClimbing(this.problem);
       this._callParent('onResult', fitness, this.problem.timetable);
       setTimeout(loop);
     } else {

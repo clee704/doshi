@@ -8,7 +8,7 @@ describe('problem', function () {
     new Problem({
       courses: ['Math'],
       classes: ['1-1', '1-2'],
-      input_timetable: [[[['1-1', '1-2']]]]
+      inputTimetable: [[[['1-1', '1-2']]]]
     });
   });
 
@@ -16,12 +16,12 @@ describe('problem', function () {
     new Problem({
       courses: ['Math'],
       classes: ['1-1'],
-      input_timetable: [[[[]]]]
+      inputTimetable: [[[[]]]]
     });
     new Problem({
       courses: ['Math'],
       classes: ['1-1'],
-      input_timetable: [[[['1-1'], []]]]
+      inputTimetable: [[[['1-1'], []]]]
     });
   });
 
@@ -30,8 +30,8 @@ describe('problem', function () {
       new Problem({
         courses: ['Math'],
         classes: ['1-1', '1-2', '1-3'],
-        input_timetable: [[[['1-1', '1-2', '1-3']]]],
-        maximum_classes: 2
+        inputTimetable: [[[['1-1', '1-2', '1-3']]]],
+        maximumClasses: 2
       });
     }).toThrow();
   });

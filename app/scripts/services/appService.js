@@ -1,4 +1,4 @@
-/* global range, is_deep_empty */
+/* global range, isDeepEmpty */
 'use strict';
 
 angular.module('doshi')
@@ -82,7 +82,7 @@ angular.module('doshi')
       angular.copy(this.exampleData.courses, appData.courses);
       angular.copy(this.exampleData.classes, appData.classes);
       angular.copy(this.exampleData.inputTimetable, appData.inputTimetable);
-      this.status.emptyInput = is_deep_empty(appData.inputTimetable);
+      this.status.emptyInput = isDeepEmpty(appData.inputTimetable);
       appData.maxClasses = this.exampleData.maxClasses;
       appData.courseHours = this.exampleData.courseHours;
       angular.copy(this.exampleData.courseHoursByCourse, appData.courseHoursByCourse);
@@ -90,7 +90,7 @@ angular.module('doshi')
 
     this.onDataChange = function (value, oldValue) {
       if (value === oldValue) return;
-      this.status.emptyInput = is_deep_empty(appData.inputTimetable);
+      this.status.emptyInput = isDeepEmpty(appData.inputTimetable);
       if (appData.timetable.length || this.status.running || this.status.paused) {
         this.status.inputChanged = true;
       }
@@ -112,7 +112,7 @@ angular.module('doshi')
         angular.copy(savedData.courses, appData.courses);
         angular.copy(savedData.classes, appData.classes);
         angular.copy(savedData.inputTimetable, appData.inputTimetable);
-        this.status.emptyInput = is_deep_empty(appData.inputTimetable);
+        this.status.emptyInput = isDeepEmpty(appData.inputTimetable);
         appData.maxClasses = savedData.maxClasses;
         appData.courseHours = savedData.courseHours;
         angular.copy(savedData.courseHoursByCourse, appData.courseHoursByCourse);
