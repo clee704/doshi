@@ -84,10 +84,8 @@ Problem.prototype.initRandom = function () {
   var zero = function () { return 0; };
   this._c = {
     courses: mapObj(this.courses, zero),
-    coursesByDay: mapObj(this.days, function () { return mapObj(problem.courses, zero); }),
     coursesByClass: mapObj(this.classes, function () { return mapObj(problem.courses, zero); }),
-    daysByCourse: mapObj(this.courses, function () { return mapObj(problem.days, zero); }),
-    classesByCourse: mapObj(this.courses, function () { return mapObj(problem.classes, zero); })
+    daysByCourse: mapObj(this.courses, function () { return mapObj(problem.days, zero); })
   };
 
   // Make a new timetable and fill it randomly
@@ -112,12 +110,10 @@ Problem.prototype._setSlot = function (timeIndex, allocIndex) {
     var classSet = alloc[i][1];
     // Update counters
     c.courses[course] += 1;
-    c.coursesByDay[day][course] += 1;
     c.daysByCourse[course][day] += 1;
     for (var j = 0; j < classSet.length; j++) {
       var klass = classSet[j];
       c.coursesByClass[klass][course] += 1;
-      c.classesByCourse[course][klass] += 1;
     }
   }
   this.timetable[timeIndex] = allocIndex;
@@ -133,12 +129,10 @@ Problem.prototype._unsetSlot = function (timeIndex) {
     var classSet = alloc[i][1];
     // Update counters
     c.courses[course] -= 1;
-    c.coursesByDay[day][course] -= 1;
     c.daysByCourse[course][day] -= 1;
     for (var j = 0; j < classSet.length; j++) {
       var klass = classSet[j];
       c.coursesByClass[klass][course] -= 1;
-      c.classesByCourse[course][klass] -= 1;
     }
   }
   this.timetable[timeIndex] = undefined;
@@ -165,10 +159,8 @@ Problem.prototype.evaluate = function () {
   }
 
   // Compute sums of variances
-  // var sum_var_courses_by_day = sumOfVariances(c.coursesByDay);
   var sumVarCoursesByClass = sumOfVariances(c.coursesByClass);
   var sumVarDaysByCourse = sumOfVariances(c.daysByCourse);
-  // var sum_var_classes_by_course = sumOfVariances(c.classesByCourse);
 
   return [
     varCourseHours,
