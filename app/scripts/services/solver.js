@@ -8,7 +8,7 @@ angular.module('doshi')
       this._workers = [];
       this._numRunningWorkers = 0;
       this._numSolved = 0;
-      this._numMaxRun = 200;
+      this._numMaxRun = 1000;
       this._startTime = null;
       this._minFitness = null;
       this._bestTimetable = null;
@@ -88,7 +88,7 @@ angular.module('doshi')
     // Methods called by workers.
     Solver.prototype.onResult = function (fitness, timetable) {
       this._numSolved += 1;
-      if (this._minFitness === null || this.problem.compareFitness(fitness, this._minFitness) < 0) {
+      if (this._minFitness === null || this.problem.compareFitness(fitness, this._minFitness) <= 0) {
         this._minFitness = fitness;
         this._bestTimetable = timetable;
         this._debug();

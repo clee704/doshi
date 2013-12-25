@@ -144,18 +144,18 @@ Problem.prototype._unsetSlot = function (timeIndex) {
 };
 
 Problem.prototype._computeVarCourses = function () {
-  var self = this;
+  var courseHours = this.courseHours;
   var courses = this._c.courses;
   var n = this.courses.length;
-  if (!this.courseHours) {
+  if (!courseHours) {
     return variance(objValues(courses));
-  } else if (typeof this.courseHours === 'object') {
+  } else if (typeof courseHours === 'object') {
     return sum(objMap(this.courseHours, function (course) {
-      return square(courses[course] - self.courseHours[course]);
+      return square(courses[course] - courseHours[course]);
     })) / n;
   } else {
     return sum(this.courses.map(function (course) {
-      return square(courses[course] - self.courseHours);
+      return square(courses[course] - courseHours);
     })) / n;
   }
 };
@@ -217,9 +217,6 @@ Problem.prototype.evaluate = function () {
     Math.round(c.varCourses * 1000000) / 1000000,
     Math.round(c.sumVarCoursesByClass * 1000000) / 1000000,
     Math.round(c.sumVarDaysByCourse * 1000000) / 1000000,
-    // c.varCourses,
-    // c.sumVarCoursesByClass,
-    // c.sumVarDaysByCourse,
     c.sumCourses
   ];
 };
