@@ -87,7 +87,11 @@ Problem.prototype.initRandom = function () {
     varCourses: 0,
     sumCourses: 0,
     coursesByClass: mapObj(this.classes, function () { return mapObj(problem.courses, zero); }),
-    daysByCourse: mapObj(this.courses, function () { return mapObj(problem.days, zero); })
+    sumVarCoursesByClass: 0,
+    sumCoursesByClass: mapObj(this.classes, zero),
+    daysByCourse: mapObj(this.courses, function () { return mapObj(problem.days, zero); }),
+    sumVarDaysByCourse: 0,
+    sumDaysByCourse: mapObj(this.courses, zero)
   };
   this._c.varCourses = this._computeVarCourses();
 
@@ -102,7 +106,6 @@ Problem.prototype.initRandom = function () {
 };
 
 Problem.prototype._setSlot = function (timeIndex, allocIndex) {
-  var c = this._c;
   var day = this._availableTimes[timeIndex][0];
   var alloc = this._timeAllocs[timeIndex][allocIndex];
   if (alloc === undefined) {
@@ -113,17 +116,16 @@ Problem.prototype._setSlot = function (timeIndex, allocIndex) {
     var classSet = alloc[i][1];
     // Update counters
     this._updateCourses(course, 1);
-    c.daysByCourse[course][day] += 1;
+    this._updateDaysByCourse(course, day, 1);
     for (var j = 0; j < classSet.length; j++) {
       var klass = classSet[j];
-      c.coursesByClass[klass][course] += 1;
+      this._updateCoursesByClass(klass, course, 1);
     }
   }
   this.timetable[timeIndex] = allocIndex;
 };
 
 Problem.prototype._unsetSlot = function (timeIndex) {
-  var c = this._c;
   var allocIndex = this.timetable[timeIndex];
   var day = this._availableTimes[timeIndex][0];
   var alloc = this._timeAllocs[timeIndex][allocIndex];
@@ -132,10 +134,10 @@ Problem.prototype._unsetSlot = function (timeIndex) {
     var classSet = alloc[i][1];
     // Update counters
     this._updateCourses(course, -1);
-    c.daysByCourse[course][day] -= 1;
+    this._updateDaysByCourse(course, day, -1);
     for (var j = 0; j < classSet.length; j++) {
       var klass = classSet[j];
-      c.coursesByClass[klass][course] -= 1;
+      this._updateCoursesByClass(klass, course, -1);
     }
   }
   this.timetable[timeIndex] = undefined;
@@ -179,17 +181,45 @@ Problem.prototype._updateCourses = function (course, update) {
   }
 };
 
-Problem.prototype.evaluate = function () {
+Problem.prototype._updateDaysByCourse = function (course, day, update) {
   var c = this._c;
+  var days = c.daysByCourse[course];
+  var oldValue = days[day];
+  var oldSum = c.sumDaysByCourse[course];
+  days[day] += update;
+  c.sumDaysByCourse[course] += update;
 
   // Compute sums of variances
-  var sumVarCoursesByClass = sumOfVariances(c.coursesByClass);
-  var sumVarDaysByCourse = sumOfVariances(c.daysByCourse);
+  var n = this.days.length;
+  var s = update * 2;
+  var t = update * update;
+  c.sumVarDaysByCourse += (s * oldValue + t) / n - (s * oldSum + t) / (n * n);
+};
 
+Problem.prototype._updateCoursesByClass = function (klass, course, update) {
+  var c = this._c;
+  var courses = c.coursesByClass[klass];
+  var oldValue = courses[course];
+  var oldSum = c.sumCoursesByClass[klass];
+  courses[course] += update;
+  c.sumCoursesByClass[klass] += update;
+
+  // Compute sums of variances
+  var n = this.courses.length;
+  var s = update * 2;
+  var t = update * update;
+  c.sumVarCoursesByClass += (s * oldValue + t) / n - (s * oldSum + t) / (n * n);
+};
+
+Problem.prototype.evaluate = function () {
+  var c = this._c;
   return [
-    c.varCourses,
-    sumVarCoursesByClass,
-    sumVarDaysByCourse,
+    Math.round(c.varCourses * 1000000) / 1000000,
+    Math.round(c.sumVarCoursesByClass * 1000000) / 1000000,
+    Math.round(c.sumVarDaysByCourse * 1000000) / 1000000,
+    // c.varCourses,
+    // c.sumVarCoursesByClass,
+    // c.sumVarDaysByCourse,
     c.sumCourses
   ];
 };
@@ -260,10 +290,3 @@ Problem.prototype.convertTimetable = function (timetable) {
   }
   return ret;
 };
-
-
-function sumOfVariances(nestedObj) {
-  return sum(objMap(nestedObj, function (key) {
-    return variance(objValues(nestedObj[key]));
-  }));
-}
