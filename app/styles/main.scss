@@ -324,7 +324,7 @@ span.hidden-xs {
     // height is set to 100% by script
     td {
       border-bottom: 1px dotted lighten($table-border-color, 5%) !important;
-      padding: $table-cell-padding ($table-cell-padding / 2);
+      padding: $table-cell-padding;
     }
     tr:last-child td {
       border-bottom: 0 !important;
