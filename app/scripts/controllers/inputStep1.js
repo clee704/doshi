@@ -29,6 +29,10 @@ angular.module('doshi')
 
     $scope.$watch('appData.courses', appService.onDataChange, true);
     $scope.$watch('appData.classes', appService.onDataChange, true);
+    $scope.$watch('appData.inputTimetable', appService.onDataChange, true);
+    $scope.$watch('appData.maxClasses', appService.onDataChange);
+    $scope.$watch('appData.courseHours', appService.onDataChange);
+    $scope.$watch('appData.courseHoursByCourse', appService.onDataChange, true);
   })
 
   .animation('.list-group-item', ['getCssRule', function (getCssRule) {
