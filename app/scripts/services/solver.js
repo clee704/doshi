@@ -35,7 +35,7 @@ angular.module('doshi')
       try {
         this.problem = new Problem(args);
       } catch (exception) {
-        this._callback('unsolvableproblem');
+        this._callback('unsolvableproblem', exception);
         return;
       }
       for (var i = 0; i < this._workers.length; i++) {

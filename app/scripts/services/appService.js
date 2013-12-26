@@ -242,8 +242,8 @@ angular.module('doshi')
           appService.save();
         });
       },
-      unsolvableproblem: function () {
-        console.log('unsolvable');
+      unsolvableproblem: function (exception) {
+        console.log('unsolvable', exception);
       }
     };
     this.solver.on(callbacks);
