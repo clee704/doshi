@@ -36,16 +36,23 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="i in periodIndices">
-      <th>{{i + 1}}<span class="hidden-xs">교시</span></th>
-      <td ng-repeat="j in dayIndices">
-        <table class="course-classes"
-               maximize-height watch="timetable" resize-if="appData.timetable[j][i].length > 1">
-          <tr ng-repeat="assignment in appData.timetable[j][i]">
-            <td>
-              <div class="course">{{assignment[0]}}</div>
+    <tr ng-repeat="j in periodIndices">
+      <th>{{j + 1}}<span class="hidden-xs">교시</span></th>
+      <td ng-repeat="i in dayIndices"
+          ng-init="assignments = appData.timetable[i][j]">
+        <table class="course-classes" maximize-height watch="timetable">
+          <tr ng-repeat="assignment in assignments"
+              ng-init="course = assignment[0]; classes = assignment[1]">
+            <td ng-class="{highlight: isHighlighted[i][j][$index]}">
+              <div class="course"
+                   ng-click="highlightCourse(course); $event.stopPropagation()"
+                   ng-class="{highlight: course == highlightedCourse}">
+                {{course}}
+              </div>
               <div class="classes">
-                <div class="class" ng-repeat="klass in assignment[1]">
+                <div class="class" ng-repeat="klass in classes"
+                     ng-click="highlightClass(klass); $event.stopPropagation()"
+                     ng-class="{highlight: klass == highlightedClass}">
                   {{klass}}
                 </div>
               </div>

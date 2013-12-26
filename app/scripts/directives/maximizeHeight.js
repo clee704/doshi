@@ -24,7 +24,8 @@ angular.module('doshi')
           $timeout(function () {
             if (attr.resizeIf && !scope.$eval(attr.resizeIf)) return;
             var height = element.height();
-            var parentHeight = element.parent().height();
+            // +1 is needed for highlights in output timetable to be fully filled.
+            var parentHeight = element.parent().height() + 1;
             if (height === parentHeight) return;
             element.css('height', parentHeight + 'px').addClass('height-maximized');
           });

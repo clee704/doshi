@@ -303,6 +303,7 @@ span.hidden-xs {
     margin: 1px 4px;
     line-height: 1;
     white-space: nowrap;
+    cursor: pointer;
   }
   .classes {
     display: inline-block;
@@ -311,7 +312,7 @@ span.hidden-xs {
 
 .output-timetable {
   > tbody > tr > td {
-    padding: 0;
+    padding: 0 !important;
   }
   @media print {
     .course-classes td {
@@ -327,6 +328,16 @@ span.hidden-xs {
     }
     tr:last-child td {
       border-bottom: 0 !important;
+    }
+  }
+  td.highlight {
+    background-color: $state-success-bg;
+  }
+  .course,
+  .class {
+    &.highlight {
+      color: darken($state-success-text, 10%);
+      font-weight: bold;
     }
   }
 }
