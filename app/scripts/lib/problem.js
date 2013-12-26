@@ -83,15 +83,35 @@ Problem.prototype.initRandom = function () {
   // Initialize counters that is used to evaluate the fitness of the current timetable
   var zero = function () { return 0; };
   this._c = {
+    // Number of hours for each course.
     courses: mapObj(this.courses, zero),
     varCourses: 0,
     sumCourses: 0,
-    coursesByClass: mapObj(this.classes, function () { return mapObj(problem.courses, zero); }),
+
+    // Number of hours for each course for each class.
+    coursesByClass: mapObj(this.classes, function () {
+      return mapObj(problem.courses, zero);
+    }),
     sumVarCoursesByClass: 0,
     sumCoursesByClass: mapObj(this.classes, zero),
-    daysByCourse: mapObj(this.courses, function () { return mapObj(problem.days, zero); }),
+
+    // Number of hours for each day for each course.
+    daysByCourse: mapObj(this.courses, function () {
+      return mapObj(problem.days, zero);
+    }),
     sumVarDaysByCourse: 0,
-    sumDaysByCourse: mapObj(this.courses, zero)
+    sumDaysByCourse: mapObj(this.courses, zero),
+
+    // Number of hours for each course for each day for each class.
+    coursesByDayByClass: mapObj(this.classes, function () {
+      return mapObj(problem.days, function () {
+        return mapObj(problem.courses, zero);
+      });
+    }),
+    sumVarCoursesByDayByClass: 0,
+    sumCoursesByDayByClass: mapObj(this.classes, function () {
+      return mapObj(problem.days, zero);
+    })
   };
   this._c.varCourses = this._computeVarCourses();
 
@@ -120,6 +140,7 @@ Problem.prototype._setSlot = function (timeIndex, allocIndex) {
     for (var j = 0; j < classSet.length; j++) {
       var klass = classSet[j];
       this._updateCoursesByClass(klass, course, 1);
+      this._updateCoursesByDayByClass(klass, day, course, 1);
     }
   }
   this.timetable[timeIndex] = allocIndex;
@@ -138,6 +159,7 @@ Problem.prototype._unsetSlot = function (timeIndex) {
     for (var j = 0; j < classSet.length; j++) {
       var klass = classSet[j];
       this._updateCoursesByClass(klass, course, -1);
+      this._updateCoursesByDayByClass(klass, day, course, -1);
     }
   }
   this.timetable[timeIndex] = undefined;
@@ -168,7 +190,7 @@ Problem.prototype._updateCourses = function (course, update) {
   courses[course] += update;
   c.sumCourses += update;
 
-  // Compute variance of course hours
+  // Update variance of course hours
   var n = this.courses.length;
   var s = update * 2;
   var t = update * update;
@@ -189,7 +211,7 @@ Problem.prototype._updateDaysByCourse = function (course, day, update) {
   days[day] += update;
   c.sumDaysByCourse[course] += update;
 
-  // Compute sums of variances
+  // Update sum of variances
   var n = this.days.length;
   var s = update * 2;
   var t = update * update;
@@ -204,11 +226,26 @@ Problem.prototype._updateCoursesByClass = function (klass, course, update) {
   courses[course] += update;
   c.sumCoursesByClass[klass] += update;
 
-  // Compute sums of variances
+  // Update sum of variances
   var n = this.courses.length;
   var s = update * 2;
   var t = update * update;
   c.sumVarCoursesByClass += (s * oldValue + t) / n - (s * oldSum + t) / (n * n);
+};
+
+Problem.prototype._updateCoursesByDayByClass = function (klass, day, course, update) {
+  var c = this._c;
+  var courses = c.coursesByDayByClass[klass][day];
+  var oldValue = courses[course];
+  var oldSum = c.sumCoursesByDayByClass[klass][day];
+  courses[course] += update;
+  c.sumCoursesByDayByClass[klass][day] += update;
+
+  // Update sum of variances
+  var n = this.courses.length;
+  var s = update * 2;
+  var t = update * update;
+  c.sumVarCoursesByDayByClass += (s * oldValue + t) / n - (s * oldSum + t) / (n * n);
 };
 
 Problem.prototype.evaluate = function () {
@@ -216,6 +253,7 @@ Problem.prototype.evaluate = function () {
   return [
     Math.round(c.varCourses * 1000000) / 1000000,
     Math.round(c.sumVarCoursesByClass * 1000000) / 1000000,
+    Math.round(c.sumVarCoursesByDayByClass * 1000000) / 1000000,
     Math.round(c.sumVarDaysByCourse * 1000000) / 1000000,
     c.sumCourses
   ];
