@@ -311,17 +311,37 @@ Problem.prototype.undo = function () {
 
 Problem.prototype.convertTimetable = function (timetable) {
   var ret = [];
+
+  // Make an empty table.
   for (var c = 0; c < this.days.length; c++) {
     var column = [];
     column.length = this._numPeriods;
     ret.push(column);
   }
+
+  // Fill the table with allocations.
   for (var i = 0; i < this._availableTimes.length; i++) {
     var timeInfo = this._availableTimes[i];
     var day = timeInfo[0];
     var period = timeInfo[1];
     var alloc = this._timeAllocs[i][timetable[i]];
     ret[day][period] = alloc;
+  }
+
+  // Sort arrangements by course indices for each allocation.
+  var courseIndices = mapObj(this.courses, function (course, i) {
+    return i;
+  });
+  var compareArrangement = function (a, b) {
+    return courseIndices[a[0]] - courseIndices[b[0]];
+  }
+  for (var day = 0; day < ret.length; day++) {
+    var column = ret[day];
+    for (var period = 0; period < column.length; period++) {
+      var alloc = column[period];
+      if (!alloc) continue;
+      alloc.sort(compareArrangement);
+    }
   }
   return ret;
 };
