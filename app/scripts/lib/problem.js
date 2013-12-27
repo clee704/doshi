@@ -25,6 +25,8 @@ function Problem(args) {
   this.initRandom();
 }
 
+// Converts the given input timetable into an internal representation
+// which is more suited for searching.
 Problem.prototype._makeAvailableTimes = function () {
   var availableTimes = [];
   for (var c = 0; c < this.inputTimetable.length; c++) {
@@ -39,39 +41,39 @@ Problem.prototype._makeAvailableTimes = function () {
   this._availableTimes = availableTimes;
 };
 
+// Makes all possible combinations of courses and classes for each time period.
 Problem.prototype._makeTimeAllocs = function () {
   var timeAllocs = [];
   var numPeriods = 0;
-  for (var i = 0; i < this._availableTimes.length; i++) {
-    var timeInfo = this._availableTimes[i];
+  for (var timeIndex = 0; timeIndex < this._availableTimes.length; timeIndex++) {
+    var timeInfo = this._availableTimes[timeIndex];
     var period = timeInfo[1];
     if (period + 1 > numPeriods) {
+      // Update the number of periods for future use.
       numPeriods = period + 1;
     }
     var availableClasses = timeInfo[2];
     var availableCourses = timeInfo[3];
     if (!availableCourses || availableCourses.length === 0) {
+      // Empty courses mean any course.
       availableCourses = this.courses;
     }
-    var temp = [];
+    var allocs = [];
     var classPartitions = setPartitions(availableClasses, this.maxClasses);
     for (var j = 0; j < classPartitions.length; j++) {
-      var classes = classPartitions[j];
-      if (availableCourses.length < classes.length) {
+      var classGroups = classPartitions[j];
+      if (availableCourses.length < classGroups.length) {
+        // We cannot assign n courses to m groups of classes where n < m.
         continue;
       }
-      var coursePermutations = permutations(availableCourses, classes.length);
+      var coursePermutations = permutations(availableCourses, classGroups.length);
       for (var k = 0; k < coursePermutations.length; k++) {
         var courses = coursePermutations[k];
-        var temp2 = [];
-        var arrangements = zip(courses, classes);
-        for (var l = 0; l < arrangements.length; l++) {
-          temp2.push(arrangements[l]);
-        }
-        temp.push(temp2);
+        var arrangements = zip(courses, classGroups);
+        allocs.push(arrangements);
       }
     }
-    timeAllocs.push(temp);
+    timeAllocs.push(allocs);
   }
   this._timeAllocs = timeAllocs;
   this._numPeriods = numPeriods;
@@ -80,42 +82,36 @@ Problem.prototype._makeTimeAllocs = function () {
 Problem.prototype.initRandom = function () {
   var problem = this;
 
-  // Initialize counters that is used to evaluate the fitness of the current timetable
+  // Variables for fitness evaluation.
   var zero = function () { return 0; };
+  var dayCounters = function () { return mapObj(problem.days, zero); };
+  var courseCounters = function () { return mapObj(problem.courses, zero); };
   this._c = {
     // Number of hours for each course.
-    courses: mapObj(this.courses, zero),
+    courses: courseCounters(),
     varCourses: 0,
     sumCourses: 0,
 
     // Number of hours for each course for each class.
-    coursesByClass: mapObj(this.classes, function () {
-      return mapObj(problem.courses, zero);
-    }),
+    coursesByClass: mapObj(this.classes, courseCounters),
     sumVarCoursesByClass: 0,
     sumCoursesByClass: mapObj(this.classes, zero),
 
     // Number of hours for each day for each course.
-    daysByCourse: mapObj(this.courses, function () {
-      return mapObj(problem.days, zero);
-    }),
+    daysByCourse: mapObj(this.courses, dayCounters),
     sumVarDaysByCourse: 0,
-    sumDaysByCourse: mapObj(this.courses, zero),
+    sumDaysByCourse: courseCounters(),
 
     // Number of hours for each course for each day for each class.
     coursesByDayByClass: mapObj(this.classes, function () {
-      return mapObj(problem.days, function () {
-        return mapObj(problem.courses, zero);
-      });
+      return mapObj(problem.days, courseCounters);
     }),
     sumVarCoursesByDayByClass: 0,
-    sumCoursesByDayByClass: mapObj(this.classes, function () {
-      return mapObj(problem.days, zero);
-    })
+    sumCoursesByDayByClass: mapObj(this.classes, dayCounters)
   };
   this._c.varCourses = this._computeVarCourses();
 
-  // Make a new timetable and fill it randomly
+  // Make a new timetable and fill it randomly.
   this.timetable = [];
   this.timetable.length = this._availableTimes.length;
   for (var timeIndex = 0; timeIndex < this._availableTimes.length; timeIndex++) {
@@ -133,12 +129,12 @@ Problem.prototype._setSlot = function (timeIndex, allocIndex) {
   }
   for (var i = 0; i < alloc.length; i++) {
     var course = alloc[i][0];
-    var classSet = alloc[i][1];
+    var classGroup = alloc[i][1];
     // Update counters
     this._updateCourses(course, 1);
     this._updateDaysByCourse(course, day, 1);
-    for (var j = 0; j < classSet.length; j++) {
-      var klass = classSet[j];
+    for (var j = 0; j < classGroup.length; j++) {
+      var klass = classGroup[j];
       this._updateCoursesByClass(klass, course, 1);
       this._updateCoursesByDayByClass(klass, day, course, 1);
     }
@@ -152,12 +148,12 @@ Problem.prototype._unsetSlot = function (timeIndex) {
   var alloc = this._timeAllocs[timeIndex][allocIndex];
   for (var i = 0; i < alloc.length; i++) {
     var course = alloc[i][0];
-    var classSet = alloc[i][1];
+    var classGroup = alloc[i][1];
     // Update counters
     this._updateCourses(course, -1);
     this._updateDaysByCourse(course, day, -1);
-    for (var j = 0; j < classSet.length; j++) {
-      var klass = classSet[j];
+    for (var j = 0; j < classGroup.length; j++) {
+      var klass = classGroup[j];
       this._updateCoursesByClass(klass, course, -1);
       this._updateCoursesByDayByClass(klass, day, course, -1);
     }
@@ -259,7 +255,10 @@ Problem.prototype.evaluate = function () {
   ];
 };
 
+// Compares two fitness tuples a and b.
 Problem.prototype.compareFitness = function (a, b) {
+  // We cannot just write it as a < b since it is equivalent to
+  // a.toString() < b.toString(), which often gives surprising results.
   var x, y;
   x = a[0];
   y = b[0];
@@ -306,6 +305,7 @@ Problem.prototype.undo = function () {
   this._setSlot(timeIndex, allocIndex);
 };
 
+// Converts the result timetable into a more usable format.
 Problem.prototype.convertTimetable = function (timetable) {
   var ret = [];
 
