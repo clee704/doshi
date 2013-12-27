@@ -280,15 +280,12 @@ Problem.prototype.compareFitness = function (a, b) {
   return 0;
 };
 
-Problem.prototype.moves = function (doShuffle) {
+Problem.prototype.moves = function () {
   var moves = [];
   for (var timeIndex = 0; timeIndex < this._availableTimes.length; timeIndex++) {
     for (var allocIndex = 0; allocIndex < this._timeAllocs[timeIndex].length; allocIndex++) {
       moves.push([timeIndex, allocIndex]);
     }
-  }
-  if (doShuffle) {
-    shuffle(moves);
   }
   return moves;
 };
