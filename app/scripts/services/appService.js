@@ -1,4 +1,4 @@
-/* global range, isDeepEmpty */
+/* global range, isDeepEmpty, mapObj */
 'use strict';
 
 angular.module('doshi')

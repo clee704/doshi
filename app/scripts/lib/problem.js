@@ -1,5 +1,5 @@
 /* global mapObj, objMap, objValues, permutations, randint, setPartitions,
-          shuffle, square, sum, variance, zip */
+          square, sum, variance, zip */
 /* exported Problem */
 'use strict';
 
@@ -308,10 +308,11 @@ Problem.prototype.undo = function () {
 // Converts the result timetable into a more usable format.
 Problem.prototype.convertTimetable = function (timetable) {
   var ret = [];
+  var column, day, period, alloc;
 
   // Make an empty table.
   for (var c = 0; c < this.days.length; c++) {
-    var column = [];
+    column = [];
     column.length = this._numPeriods;
     ret.push(column);
   }
@@ -319,9 +320,9 @@ Problem.prototype.convertTimetable = function (timetable) {
   // Fill the table with allocations.
   for (var i = 0; i < this._availableTimes.length; i++) {
     var timeInfo = this._availableTimes[i];
-    var day = timeInfo[0];
-    var period = timeInfo[1];
-    var alloc = this._timeAllocs[i][timetable[i]];
+    day = timeInfo[0];
+    period = timeInfo[1];
+    alloc = this._timeAllocs[i][timetable[i]];
     ret[day][period] = alloc;
   }
 
@@ -331,11 +332,11 @@ Problem.prototype.convertTimetable = function (timetable) {
   });
   var compareArrangement = function (a, b) {
     return courseIndices[a[0]] - courseIndices[b[0]];
-  }
-  for (var day = 0; day < ret.length; day++) {
-    var column = ret[day];
-    for (var period = 0; period < column.length; period++) {
-      var alloc = column[period];
+  };
+  for (day = 0; day < ret.length; day++) {
+    column = ret[day];
+    for (period = 0; period < column.length; period++) {
+      alloc = column[period];
       if (!alloc) continue;
       alloc.sort(compareArrangement);
     }
