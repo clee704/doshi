@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('doshi')
-  .controller('CoursesAndClassesInputCtrl', function ($scope, appData, appService) {
+  .controller('CoursesAndClassesInputCtrl', function ($scope, problemArgs, appService) {
     $scope.page = $scope.getCurrentPage();
-    $scope.appData = appData;
+    $scope.courses = problemArgs.courses;
+    $scope.classes = problemArgs.classes;
+    $scope._problemArgs = problemArgs;
 
     $scope.loadExample = function () {
       appService.loadExample();
@@ -27,12 +29,12 @@ angular.module('doshi')
       appService.removeClass(klass);
     };
 
-    $scope.$watch('appData.courses', appService.onDataChange, true);
-    $scope.$watch('appData.classes', appService.onDataChange, true);
-    $scope.$watch('appData.inputTimetable', appService.onDataChange, true);
-    $scope.$watch('appData.maxClasses', appService.onDataChange);
-    $scope.$watch('appData.courseHours', appService.onDataChange);
-    $scope.$watch('appData.courseHoursByCourse', appService.onDataChange, true);
+    $scope.$watch('courses', appService.onDataChange, true);
+    $scope.$watch('classes', appService.onDataChange, true);
+    $scope.$watch('_problemArgs.inputTimetable', appService.onDataChange, true);
+    $scope.$watch('_problemArgs.maxClasses', appService.onDataChange);
+    $scope.$watch('_problemArgs.courseHours', appService.onDataChange);
+    $scope.$watch('_problemArgs.courseHoursByCourse', appService.onDataChange, true);
   })
 
   .animation('.list-group-item', ['getCssRule', function (getCssRule) {

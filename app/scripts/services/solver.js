@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('doshi')
-  .factory('Solver', function (appData, time) {
+  .factory('Solver', function (problemArgs, time) {
 
     function Solver() {
       this._workers = [];
@@ -26,11 +26,11 @@ angular.module('doshi')
 
     Solver.prototype.start = function () {
       var args = {
-        courses: appData.courses,
-        classes: appData.classes,
-        inputTimetable: appData.inputTimetable,
-        maxClasses: appData.maxClasses,
-        courseHours: appData.courseHours
+        courses: problemArgs.courses,
+        classes: problemArgs.classes,
+        inputTimetable: problemArgs.inputTimetable,
+        maxClasses: problemArgs.maxClasses,
+        courseHours: problemArgs.courseHours
       };
       try {
         this.problem = new Problem(args);

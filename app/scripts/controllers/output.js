@@ -1,14 +1,13 @@
 'use strict';
 
 angular.module('doshi')
-  .controller('OutputCtrl', function ($scope, appData, appService, screenclick) {
+  .controller('OutputCtrl', function ($scope, problemArgs, appService, screenclick) {
     $scope.page = $scope.getCurrentPage();
     $scope.dayIndices = appService.dayIndices;
     $scope.periodIndices = appService.periodIndices;
-    $scope.appData = appData;
-    $scope.appService = appService;
     $scope.status = appService.status;
-
+    $scope.timetable = appService.timetable;
+    $scope.timetableStats = appService.timetableStats;
     $scope.isHighlighted = [];
     $scope.highlightedCourse = undefined;
     $scope.highlightedClass = undefined;
@@ -31,7 +30,7 @@ angular.module('doshi')
       for (var i = 0; i < appService.numDays; i++) {
         for (var j = 0; j < appService.numPeriods; j++) {
           $scope.isHighlighted[i][j] = [];
-          var assignments = appData.timetable[i][j];
+          var assignments = appService.timetable[i][j];
           if (!assignments) continue;
           for (var k = 0; k < assignments.length; k++) {
             if (assignments[k][0] === course) {
@@ -49,12 +48,12 @@ angular.module('doshi')
       for (var i = 0; i < appService.numDays; i++) {
         for (var j = 0; j < appService.numPeriods; j++) {
           $scope.isHighlighted[i][j] = [];
-          var assignments = appData.timetable[i][j];
+          var assignments = appService.timetable[i][j];
           if (!assignments) continue;
           for (var k = 0; k < assignments.length; k++) {
-            var classes = assignments[k][1];
-            for (var l = 0; l < classes.length; l++) {
-              if (classes[l] === klass) {
+            var classGroup = assignments[k][1];
+            for (var l = 0; l < classGroup.length; l++) {
+              if (classGroup[l] === klass) {
                 $scope.isHighlighted[i][j][k] = true;
                 break;
               }

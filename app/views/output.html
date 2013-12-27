@@ -9,9 +9,9 @@
   <div class="output-controls hidden-print" ng-if="!status.emptyInput">
     <button class="btn btn-success" ng-click="start()" remove-outline
             ng-if="!status.running &amp;&amp; (!status.paused || status.inputChanged)">
-      <span ng-if="!(status.paused || status.inputChanged || appData.timetable.length)">시간표 만들기</span>
+      <span ng-if="!(status.paused || status.inputChanged || timetable.length)">시간표 만들기</span>
       <span ng-if="status.inputChanged">바뀐 설정으로 시간표 만들기</span>
-      <span ng-if="!(status.paused || status.inputChanged || !appData.timetable.length)">새 시간표 만들기</span>
+      <span ng-if="!(status.paused || status.inputChanged || !timetable.length)">새 시간표 만들기</span>
     </button>
     <button class="btn btn-default" ng-click="pause()" remove-outline
             ng-if="status.running">일시 정지</button>
@@ -21,10 +21,10 @@
   </div>
 </div>
 <div progress-bar model="status.progress.percent" ng-if="status.running || status.paused"></div>
-<div class="alert alert-warning" ng-if="appData.timetable.length &amp;&amp; status.inputChanged">
+<div class="alert alert-warning" ng-if="timetable.length &amp;&amp; status.inputChanged">
   아래 시간표는 과거에 만들어진 것입니다. 시간표를 만들었을 당시의 설정값은 현재 설정값과 다를 수 있습니다.
 </div>
-<div ng-if="appData.timetable.length">
+<div ng-if="timetable.length">
   <table class="table table-bordered timetable output-timetable">
     <thead>
       <tr>
@@ -40,7 +40,7 @@
       <tr ng-repeat="j in periodIndices">
         <th>{{j + 1}}<span class="hidden-xs">교시</span></th>
         <td ng-repeat="i in dayIndices"
-            ng-init="assignments = appData.timetable[i][j]">
+            ng-init="assignments = timetable[i][j]">
           <table class="course-classes" maximize-height watch="timetable">
             <tr ng-repeat="assignment in assignments"
                 ng-init="course = assignment[0]; classes = assignment[1]">
@@ -80,14 +80,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="course in appData.courses">
+          <tr ng-repeat="(course, days) in timetableStats.daysByCourse">
             <th>{{course}}</th>
-            <td ng-repeat="day in appService.dayIndices">
-              {{appData.timetableStats.daysByCourse[course][day]}}
-            </td>
-            <td>
-              {{appData.timetableStats.sumDaysByCourse[course]}}
-            </td>
+            <td ng-repeat="(day, hours) in days">{{hours}}</td>
+            <td>{{timetableStats.sumDaysByCourse[course]}}</td>
           </tr>
         </tbody>
       </table>
@@ -97,19 +93,15 @@
         <thead>
           <tr>
             <th></th>
-            <th ng-repeat="course in appData.courses">{{course}}</th>
+            <th ng-repeat="(course, _) in timetableStats.daysByCourse">{{course}}</th>
             <th>합계</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="klass in appData.classes">
+          <tr ng-repeat="(klass, courses) in timetableStats.coursesByClass">
             <th>{{klass}}</th>
-            <td ng-repeat="course in appData.courses">
-              {{appData.timetableStats.coursesByClass[klass][course]}}
-            </td>
-            <td>
-              {{appData.timetableStats.sumCoursesByClass[klass]}}
-            </td>
+            <td ng-repeat="(course, hours) in courses">{{hours}}</td>
+            <td>{{timetableStats.sumCoursesByClass[klass]}}</td>
           </tr>
         </tbody>
       </table>
