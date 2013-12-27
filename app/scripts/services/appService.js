@@ -43,7 +43,7 @@ angular.module('doshi')
           [['1-3', '2-7']],
           [['2-2']],
           [['2-2', '3-7']],
-          []
+          [['2-2']]
         ],
         [
           [],
@@ -73,8 +73,8 @@ angular.module('doshi')
           []
         ]
       ],
-      maxClasses: 3,
-      courseHours: 10,
+      maxClasses: 2,
+      courseHours: 9,
       courseHoursByCourse: {}
     };
 
@@ -117,6 +117,7 @@ angular.module('doshi')
         appData.courseHours = savedData.courseHours;
         angular.copy(savedData.courseHoursByCourse, appData.courseHoursByCourse);
         angular.copy(savedData.timetable, appData.timetable);
+        angular.copy(savedData.timetableStats, appData.timetableStats);
       }
       var savedStatus = localStorage.load('status');
       if (savedStatus !== null) {
@@ -239,6 +240,7 @@ angular.module('doshi')
           status.running = false;
           status.finished = true;
           angular.copy(timetable, appData.timetable);
+          buildTimetableStats();
           appService.save();
         });
       },
@@ -247,6 +249,37 @@ angular.module('doshi')
       }
     };
     this.solver.on(callbacks);
+
+    function buildTimetableStats() {
+      var zero = function () { return 0; };
+      appData.timetableStats = {
+        daysByCourse: mapObj(appData.courses, function () {
+          return mapObj(appService.dayIndices, zero);
+        }),
+        sumDaysByCourse: mapObj(appData.courses, zero),
+        coursesByClass: mapObj(appData.classes, function () {
+          return mapObj(appData.courses, zero);
+        }),
+        sumCoursesByClass: mapObj(appData.classes, zero)
+      };
+      for (var day = 0; day < appService.numDays; day++) {
+        for (var period = 0; period < appService.numPeriods; period++) {
+          var assignments = appData.timetable[day][period];
+          if (!assignments) continue;
+          for (var k = 0; k < assignments.length; k++) {
+            var course = assignments[k][0];
+            var classes = assignments[k][1];
+            appData.timetableStats.daysByCourse[course][day] += 1;
+            appData.timetableStats.sumDaysByCourse[course] += 1;
+            for (var l = 0; l < classes.length; l++) {
+              var klass = classes[l];
+              appData.timetableStats.coursesByClass[klass][course] += 1;
+              appData.timetableStats.sumCoursesByClass[klass] += 1;
+            }
+          }
+        }
+      }
+    }
 
     this.load();
   });

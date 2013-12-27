@@ -10,4 +10,8 @@ angular.module('doshi')
     this.courseHours = null;
     this.courseHoursByCourse = {};
     this.timetable = [];
+    this.timetableStats = {
+      daysByCourse: {},
+      coursesByClass: {}
+    };
   });

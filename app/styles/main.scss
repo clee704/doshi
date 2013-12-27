@@ -2,7 +2,8 @@
 
 $font-family-sans-serif: "Apple SD Gothic Neo", "Nanum Gothic", NanumGothic, "나눔고딕", "서울남산체", "Malgun Gothic", "MalgunGothic", "맑은 고딕", "맑은고딕", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-size-base: 14px;
-$font-size-h1: floor($font-size-base * 1.3) !default; // ~18px
+$font-size-h1: floor($font-size-base * 1.2857142857) !default; // ~18px
+$font-size-h2: floor($font-size-base * 1.1428571429) !default; // ~16px
 $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 @import 'sass-bootstrap/lib/bootstrap';
 
@@ -65,7 +66,7 @@ span.hidden-xs {
   margin-bottom: $line-height-computed;
   white-space: nowrap;
   @media (min-width: $screen-sm-min) {
-    line-height: 35px;
+    line-height: 40px;
     margin-bottom: 0;
   }
 }
@@ -270,7 +271,7 @@ span.hidden-xs {
   }
 }
 
-.timetable {
+.table {
   > thead,
   > tbody {
     > tr {
@@ -293,6 +294,9 @@ span.hidden-xs {
   > thead > tr > th {
     border-bottom-width: 1px;
   }
+}
+
+.timetable {
   > tbody > tr > td {
     padding-left: ($table-cell-padding / 2) !important;
     padding-right: ($table-cell-padding / 2) !important;
@@ -303,7 +307,6 @@ span.hidden-xs {
     margin: 1px 4px;
     line-height: 1;
     white-space: nowrap;
-    cursor: pointer;
   }
   .classes {
     display: inline-block;
@@ -335,6 +338,7 @@ span.hidden-xs {
   }
   .course,
   .class {
+    cursor: pointer;
     &.highlight {
       color: darken($state-success-text, 10%);
       font-weight: bold;

@@ -24,44 +24,96 @@
 <div class="alert alert-warning" ng-if="appData.timetable.length &amp;&amp; status.inputChanged">
   아래 시간표는 과거에 만들어진 것입니다. 시간표를 만들었을 당시의 설정값은 현재 설정값과 다를 수 있습니다.
 </div>
-<table class="table table-bordered timetable output-timetable" ng-if="appData.timetable.length">
-  <thead>
-    <tr>
-      <th></th>
-      <th>월</th>
-      <th>화</th>
-      <th>수</th>
-      <th>목</th>
-      <th>금</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="j in periodIndices">
-      <th>{{j + 1}}<span class="hidden-xs">교시</span></th>
-      <td ng-repeat="i in dayIndices"
-          ng-init="assignments = appData.timetable[i][j]">
-        <table class="course-classes" maximize-height watch="timetable">
-          <tr ng-repeat="assignment in assignments"
-              ng-init="course = assignment[0]; classes = assignment[1]">
-            <td ng-class="{highlight: isHighlighted[i][j][$index]}">
-              <div class="course"
-                   ng-click="highlightCourse(course); $event.stopPropagation()"
-                   ng-class="{highlight: course == highlightedCourse}">
-                {{course}}
-              </div>
-              <div class="classes">
-                <div class="class" ng-repeat="klass in classes"
-                     ng-click="highlightClass(klass); $event.stopPropagation()"
-                     ng-class="{highlight: klass == highlightedClass}">
-                  {{klass}}
+<div ng-if="appData.timetable.length">
+  <table class="table table-bordered timetable output-timetable">
+    <thead>
+      <tr>
+        <th></th>
+        <th>월</th>
+        <th>화</th>
+        <th>수</th>
+        <th>목</th>
+        <th>금</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="j in periodIndices">
+        <th>{{j + 1}}<span class="hidden-xs">교시</span></th>
+        <td ng-repeat="i in dayIndices"
+            ng-init="assignments = appData.timetable[i][j]">
+          <table class="course-classes" maximize-height watch="timetable">
+            <tr ng-repeat="assignment in assignments"
+                ng-init="course = assignment[0]; classes = assignment[1]">
+              <td ng-class="{highlight: isHighlighted[i][j][$index]}">
+                <div class="course"
+                     ng-click="highlightCourse(course); $event.stopPropagation()"
+                     ng-class="{highlight: course == highlightedCourse}">
+                  {{course}}
                 </div>
-              </div>
+                <div class="classes">
+                  <div class="class" ng-repeat="klass in classes"
+                       ng-click="highlightClass(klass); $event.stopPropagation()"
+                       ng-class="{highlight: klass == highlightedClass}">
+                    {{klass}}
+                  </div>
+                </div>
+              </td>
+            </div>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h2>수업 시간 통계</h2>
+  <div class="row">
+    <div class="col-sm-6">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th></th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+            <th>금</th>
+            <th>합계</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="course in appData.courses">
+            <th>{{course}}</th>
+            <td ng-repeat="day in appService.dayIndices">
+              {{appData.timetableStats.daysByCourse[course][day]}}
             </td>
-          </div>
-        </table>
-      </td>
-    </tr>
-  </tbody>
-</table>
+            <td>
+              {{appData.timetableStats.sumDaysByCourse[course]}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-6">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th></th>
+            <th ng-repeat="course in appData.courses">{{course}}</th>
+            <th>합계</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="klass in appData.classes">
+            <th>{{klass}}</th>
+            <td ng-repeat="course in appData.courses">
+              {{appData.timetableStats.coursesByClass[klass][course]}}
+            </td>
+            <td>
+              {{appData.timetableStats.sumCoursesByClass[klass]}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 <div ng-include="'templates/pagination.html'"></div>

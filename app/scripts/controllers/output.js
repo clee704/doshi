@@ -6,6 +6,7 @@ angular.module('doshi')
     $scope.dayIndices = appService.dayIndices;
     $scope.periodIndices = appService.periodIndices;
     $scope.appData = appData;
+    $scope.appService = appService;
     $scope.status = appService.status;
 
     $scope.isHighlighted = [];
