@@ -339,6 +339,38 @@ module.exports = function (grunt) {
       }
     },
 
+    manifest: {
+      generate: {
+        options: {
+          basePath: '<%= yeoman.dist %>',
+          cache: [
+            // Font Awesome add query strings when requesting font files.
+            // These cannot be described in src.
+            'bower_components/font-awesome/fonts/fontawesome-webfont.eot?v=4.0.3',
+            'bower_components/font-awesome/fonts/fontawesome-webfont.svg?v=4.0.3',
+            'bower_components/font-awesome/fonts/fontawesome-webfont.ttf?v=4.0.3',
+            'bower_components/font-awesome/fonts/fontawesome-webfont.woff?v=4.0.3'
+          ],
+          network: [
+            'http://www.google-analytics.com/*',
+            'https://www.google-analytics.com/*'
+          ]
+        },
+        src: [
+          'index.html',
+          'favicon.ico',
+          'templates/*.html',
+          'views/*.html',
+          'images/*.png',
+          'styles/*.css',
+          'styles/fonts/*',
+          // 'bower_components/sass-bootstrap/fonts/*',
+          'scripts/*.js'
+        ],
+        dest: '<%= yeoman.dist %>/manifest.appcache'
+      }
+    },
+
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
@@ -448,7 +480,8 @@ module.exports = function (grunt) {
     'cssmin',
     'uglify',
     'rev',
-    'usemin'
+    'usemin',
+    'manifest'
   ]);
 
   grunt.registerTask('default', [
