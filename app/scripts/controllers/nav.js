@@ -29,7 +29,7 @@ angular.module('doshi')
       });
   })
 
-  .controller('NavCtrl', function ($scope, $location, $route, scrollTo) {
+  .controller('NavCtrl', function ($scope, $location, $route) {
     $scope.pages = [
       {path: '/', title: '교과목/반 입력'},
       {path: '/input-times', title: '시간 입력'},
@@ -61,9 +61,6 @@ angular.module('doshi')
       var j = pageIndicesByPath[path];
       $scope.pageTransitionDirection = i === undefined || i <= j ? 'forward' : 'backward';
 
-      // Scroll so that the top of the slide is shown.
-      scrollTo('.view-wrapper');
-
       // Set variables.
       previousPath = path;
       $scope.path = path;
@@ -74,7 +71,7 @@ angular.module('doshi')
     };
   })
 
-  .animation('.view', ['getCssRule', function (getCssRule) {
+  .animation('.view', ['getCssRule', 'scrollTo', function (getCssRule, scrollTo) {
     var selectors = [
       '.forward .view.ng-enter',
       '.forward .view.ng-leave.ng-leave-active',
@@ -98,6 +95,14 @@ angular.module('doshi')
           cssRule.style['-webkit-transform'] = translateText;
           cssRule.style['-ms-transform'] = translateText;
           cssRule.style.transform = translateText;
+        }
+        if (!isEnter) {
+          console.log('will listen to transitionend');
+          element.on('transitionend', function () {
+            // Scroll so that the top of the slide is shown.
+            console.log('will scroll');
+            scrollTo('.view-wrapper');
+          });
         }
         done();
       };
