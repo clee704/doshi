@@ -44,7 +44,7 @@ module.exports = function (grunt) {
       },
       svg2png: {
         files: ['<%= yeoman.app %>/images/*.svg'],
-        tasks: ['svg2png']
+        tasks: ['newer:svg2png']
       },
       styles: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
