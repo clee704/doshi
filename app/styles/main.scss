@@ -1,13 +1,24 @@
-@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@font-face {
+  font-family: 'NanumBarunGothic';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/styles/fonts/NanumBarunGothic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'NanumBarunGothic';
+  font-style: normal;
+  font-weight: 700;
+  src: url(/styles/fonts/NanumBarunGothicBold.ttf) format('truetype');
+}
 
-$font-family-sans-serif: "Apple SD Gothic Neo", "Nanum Gothic", NanumGothic, "나눔고딕", "서울남산체", "Malgun Gothic", "MalgunGothic", "맑은 고딕", "맑은고딕", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-sans-serif: "NanumBarunGothic", 나눔바른고딕, "Apple SD Gothic Neo", "NanumGothic", "나눔고딕", "08SeoulNamsan", "08서울남산체", "Malgun Gothic", "맑은 고딕", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-size-base: 14px;
 $font-size-h1: floor($font-size-base * 1.2857142857) !default; // ~18px
 $font-size-h2: floor($font-size-base * 1.1428571429) !default; // ~16px
-$icon-font-path: "/bower_components/sass-bootstrap/fonts/";
+// $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 @import 'sass-bootstrap/lib/bootstrap';
 
-$fa-font-path: "/bower_components/font-awesome/fonts/";
+$fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'font-awesome/scss/font-awesome';
 
 body {
