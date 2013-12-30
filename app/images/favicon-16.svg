@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+     width="16px" height="16px" viewBox="0 0 16 16">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color: #1ba1e2" />
+      <stop offset="100%" style="stop-color: #1ba1e2" />
+    </linearGradient>
+  </defs>
+  <g>
+    <rect x="0" y="0" width="16" height="16" fill="url(#bg)" />
+    <rect x="3.5" y="3.5" width="9" height="9" rx="0.5" ry="0.5" stroke="#fff" fill="transparent" stroke-width="1" />
+    <line x1="3.5" x2="12.5" y1="6.5" y2="6.5" stroke="#fff" stroke-width="1" />
+    <line x1="3.5" x2="12.5" y1="9.5" y2="9.5" stroke="#fff" stroke-width="1" />
+    <line x1="6.5" x2="6.5" y1="3.5" y2="12.5" stroke="#fff" stroke-width="1" />
+    <line x1="9.5" x2="9.5" y1="3.5" y2="12.5" stroke="#fff" stroke-width="1" />
+  </g>
+</svg>

@@ -42,6 +42,10 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
       },
+      svg2png: {
+        files: ['<%= yeoman.app %>/images/*.svg'],
+        tasks: ['svg2png']
+      },
       styles: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
@@ -172,6 +176,17 @@ module.exports = function (grunt) {
         options: {
           debugInfo: true
         }
+      }
+    },
+
+    svg2png: {
+      all: {
+        files: [{
+          src: [
+            '<%= yeoman.app %>/images/icon-*.svg'
+          ],
+          dest: '.tmp/images'
+        }]
       }
     },
 
@@ -311,6 +326,7 @@ module.exports = function (grunt) {
           cwd: '.tmp/images',
           dest: '<%= yeoman.dist %>/images',
           src: [
+            'icon-*.png',
             'generated/*'
           ]
         }]
@@ -327,6 +343,7 @@ module.exports = function (grunt) {
     concurrent: {
       server: [
         'compass:server',
+        'svg2png',
         'copy:styles'
       ],
       test: [
@@ -335,6 +352,7 @@ module.exports = function (grunt) {
       ],
       dist: [
         'compass:dist',
+        'svg2png',
         'copy:styles',
         'imagemin',
         'svgmin',
