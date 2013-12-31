@@ -97,10 +97,8 @@ angular.module('doshi')
           cssRule.style.transform = translateText;
         }
         if (!isEnter) {
-          console.log('will listen to transitionend');
           element.on('transitionend', function () {
             // Scroll so that the top of the slide is shown.
-            console.log('will scroll');
             scrollTo('.view-wrapper');
           });
         }

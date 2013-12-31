@@ -6,7 +6,6 @@ angular.module('doshi')
   // is shown.
   .factory('scrollTo', function () {
     return function (selector) {
-      console.log('scrollTo', selector);
       var element = angular.element(selector);
       var top = element.offset().top;
       angular.element('body').animate({scrollTop: top - 15}, 'fast');
