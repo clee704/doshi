@@ -2,14 +2,12 @@
 'use strict';
 
 angular.module('doshi')
-  .service('appService', function ($timeout, Solver, problemArgs, localStorage) {
+  .service('appService', function ($timeout, Solver, problemArgs, localStorage, NUM_DAYS, NUM_PERIODS) {
     var appService = this;
 
     this.version = 0;  // Used to invalidate old saved data
-    this.numDays = 5;
-    this.numPeriods = 7;
-    this.dayIndices = range(this.numDays);
-    this.periodIndices = range(this.numPeriods);
+    this.days = range(NUM_DAYS);
+    this.periods = range(NUM_PERIODS);
     this.solver = new Solver();
     this.status = {
       emptyInput: true,
@@ -142,24 +140,21 @@ angular.module('doshi')
       if (!course) return;
       if (problemArgs.courses.indexOf(course) === -1) {
         problemArgs.courses.push(course);
+        problemArgs.courses.sort();
       }
     };
 
     this.removeCourse = function (course) {
-      var i = problemArgs.courses.indexOf(course);
-      if (i !== -1) {
-        problemArgs.courses.splice(i, 1);
+      var index = problemArgs.courses.indexOf(course);
+      if (index !== -1) {
+        problemArgs.courses.splice(index, 1);
         // Remove data containing the removed course from inputTimetable.
         var isNotRemovedCourse = function (x) { return course !== x; };
-        for (var c = 0; c < this.numDays; c++) {
-          for (var r = 0; r < this.numPeriods; r++) {
-            var timeInfo = problemArgs.inputTimetable[c][r];
-            if (!timeInfo) continue;
-            var courses = timeInfo[1];
-            if (!courses) continue;
-            angular.copy(courses.filter(isNotRemovedCourse), courses);
-          }
-        }
+        this.forEachInputCell(function (cell) {
+          var courses = cell[1];
+          if (!courses) return;
+          angular.copy(courses.filter(isNotRemovedCourse), courses);
+        });
       }
     };
 
@@ -167,28 +162,26 @@ angular.module('doshi')
       if (!klass) return;
       if (problemArgs.classes.indexOf(klass) === -1) {
         problemArgs.classes.push(klass);
+        problemArgs.classes.sort();
       }
     };
 
     this.removeClass = function (klass) {
-      var i = problemArgs.classes.indexOf(klass);
-      if (i !== -1) {
-        problemArgs.classes.splice(i, 1);
+      var index = problemArgs.classes.indexOf(klass);
+      if (index !== -1) {
+        problemArgs.classes.splice(index, 1);
         // Remove data containing the removed class from inputTimetable
         var isNotRemovedClass = function (x) { return klass !== x; };
-        for (var c = 0; c < this.numDays; c++) {
-          for (var r = 0; r < this.numPeriods; r++) {
-            var timeInfo = problemArgs.inputTimetable[c][r];
-            if (!timeInfo) continue;
-            var classes = timeInfo[0];
-            if (!classes) continue;
-            angular.copy(classes.filter(isNotRemovedClass), classes);
-            var courses = timeInfo[1];
-            if (classes.length === 0 && courses) {
-              courses.length = 0;
-            }
+        this.forEachInputCell(function (cell) {
+          var classes = cell[0];
+          if (!classes) return;
+          angular.copy(classes.filter(isNotRemovedClass), classes);
+          var courses = cell[1];
+          if (classes.length === 0 && courses) {
+            // If there are no classes, remove all courses.
+            courses.length = 0;
           }
-        }
+        });
       }
     };
 
@@ -202,6 +195,34 @@ angular.module('doshi')
 
     this.resume = function () {
       this.solver.resume();
+    };
+
+    this.forEachInputCell = function (callback) {
+      for (var day = 0; day < problemArgs.inputTimetable.length; day++) {
+        var column = problemArgs.inputTimetable[day];
+        if (!column) continue;
+        for (var period = 0; period < column.length; period++) {
+          var cell = column[period];
+          if (!cell) continue;
+          callback.call(undefined, cell);
+        }
+      }
+    };
+
+    this.forEachAssignment = function (callback) {
+      for (var day = 0; day < this.timetable.length; day++) {
+        var column = this.timetable[day];
+        if (!column) continue;
+        for (var period = 0; period < column.length; period++) {
+          var assignments = column[period];
+          if (!assignments) continue;
+          for (var k = 0; k < assignments.length; k++) {
+            var assignment = assignments[k];
+            if (!assignment) continue;
+            callback.call(undefined, assignment, day, period);
+          }
+        }
+      }
     };
 
     var status = this.status;
@@ -260,7 +281,7 @@ angular.module('doshi')
       var zero = function () { return 0; };
       var stats = {
         daysByCourse: mapObj(problemArgs.courses, function () {
-          return mapObj(appService.dayIndices, zero);
+          return mapObj(appService.days, zero);
         }),
         sumDaysByCourse: mapObj(problemArgs.courses, zero),
         coursesByClass: mapObj(problemArgs.classes, function () {
@@ -268,25 +289,17 @@ angular.module('doshi')
         }),
         sumCoursesByClass: mapObj(problemArgs.classes, zero)
       };
-      for (var day = 0; day < appService.numDays; day++) {
-        var column = appService.timetable[day];
-        if (!column) continue;
-        for (var period = 0; period < appService.numPeriods; period++) {
-          var assignments = column[period];
-          if (!assignments) continue;
-          for (var k = 0; k < assignments.length; k++) {
-            var course = assignments[k][0];
-            var classGroup = assignments[k][1];
-            stats.daysByCourse[course][day] += 1;
-            stats.sumDaysByCourse[course] += 1;
-            for (var l = 0; l < classGroup.length; l++) {
-              var klass = classGroup[l];
-              stats.coursesByClass[klass][course] += 1;
-              stats.sumCoursesByClass[klass] += 1;
-            }
-          }
+      appService.forEachAssignment(function (assignment, day) {
+        var course = assignment[0];
+        var classGroup = assignment[1];
+        stats.daysByCourse[course][day] += 1;
+        stats.sumDaysByCourse[course] += 1;
+        for (var i = 0; i < classGroup.length; i++) {
+          var klass = classGroup[i];
+          stats.coursesByClass[klass][course] += 1;
+          stats.sumCoursesByClass[klass] += 1;
         }
-      }
+      });
       angular.copy(stats, appService.timetableStats);
     }
 

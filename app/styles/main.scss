@@ -326,6 +326,27 @@ span.hidden-xs {
   }
 }
 
+.input-timetable {
+  td {
+    cursor: pointer;
+    &.selected {
+      cursor: default;
+      .course,
+      .class {
+        cursor: pointer;
+        color: $gray-light;
+        padding: 2px 3px;
+        margin: 0 1px;
+        border-radius: 2px;
+        &.selected {
+          color: #fff;
+          background-color: $gray;
+        }
+      }
+    }
+  }
+}
+
 .output-timetable {
   > tbody > tr > td {
     padding: 0 !important;
@@ -359,7 +380,7 @@ span.hidden-xs {
   }
 }
 
-.output-controls {
+.controls {
   margin-bottom: $line-height-computed;
   .fa-spinner {
     margin-left: 10px;

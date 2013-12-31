@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('doshi')
-  .controller('OutputCtrl', function ($scope, problemArgs, appService, screenclick) {
+  .controller('OutputCtrl', function ($scope, appService, screenclick) {
     $scope.page = $scope.getCurrentPage();
-    $scope.dayIndices = appService.dayIndices;
-    $scope.periodIndices = appService.periodIndices;
+    $scope.days = appService.days;
+    $scope.periods = appService.periods;
     $scope.status = appService.status;
     $scope.timetable = appService.timetable;
     $scope.timetableStats = appService.timetableStats;
@@ -23,22 +23,10 @@ angular.module('doshi')
       appService.resume();
     };
 
-    function forEachAssignment(callback) {
-      for (var i = 0; i < appService.numDays; i++) {
-        for (var j = 0; j < appService.numPeriods; j++) {
-          var assignments = appService.timetable[i][j];
-          if (!assignments) continue;
-          for (var k = 0; k < assignments.length; k++) {
-            callback.call(undefined, assignments[k]);
-          }
-        }
-      }
-    }
-
     $scope.highlightCourse = function (course) {
       $scope.highlightedCourse = course;
       $scope.highlightedClass = undefined;
-      forEachAssignment(function (assignment) {
+      appService.forEachAssignment(function (assignment) {
         assignment.isHighlighted = assignment[0] === course;
       });
     };
@@ -46,7 +34,7 @@ angular.module('doshi')
     $scope.highlightClass = function (klass) {
       $scope.highlightedCourse = undefined;
       $scope.highlightedClass = klass;
-      forEachAssignment(function (assignment) {
+      appService.forEachAssignment(function (assignment) {
         assignment.isHighlighted = false;
         var classGroup = assignment[1];
         for (var l = 0; l < classGroup.length; l++) {
@@ -61,7 +49,7 @@ angular.module('doshi')
     function dehighlight() {
       $scope.highlightedCourse = undefined;
       $scope.highlightedClass = undefined;
-      forEachAssignment(function (assignment) {
+      appService.forEachAssignment(function (assignment) {
         assignment.isHighlighted = false;
       });
     }

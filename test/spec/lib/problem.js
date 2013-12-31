@@ -16,7 +16,12 @@ describe('problem', function () {
     new Problem({
       courses: ['Math'],
       classes: ['1-1'],
-      inputTimetable: [[[[]]]]
+      inputTimetable: [[[]]]  // empty classes (undefined)
+    });
+    new Problem({
+      courses: ['Math'],
+      classes: ['1-1'],
+      inputTimetable: [[[[]]]]  // empty classes (empty array)
     });
     new Problem({
       courses: ['Math'],

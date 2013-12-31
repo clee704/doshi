@@ -6,7 +6,7 @@
   컴퓨터 사양에 따라 1분에서 5분 정도 걸릴 수 있습니다.
 </div>
 <div skip-ng-animate>
-  <div class="output-controls hidden-print" ng-if="!status.emptyInput">
+  <div class="controls hidden-print" ng-if="!status.emptyInput">
     <button class="btn btn-success" ng-click="start()" remove-outline
             ng-if="!status.running &amp;&amp; (!status.paused || status.inputChanged)">
       <span ng-if="!(status.paused || status.inputChanged || timetable.length)">시간표 만들기</span>
@@ -37,10 +37,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="j in periodIndices">
-        <th>{{j + 1}}<span class="hidden-xs">교시</span></th>
-        <td ng-repeat="i in dayIndices"
-            ng-init="assignments = timetable[i][j]">
+      <tr ng-repeat="period in periods">
+        <th>{{period + 1}}<span class="hidden-xs">교시</span></th>
+        <td ng-repeat="day in days"
+            ng-init="assignments = timetable[day][period]">
           <table class="course-classes" maximize-height watch="timetable">
             <tr ng-repeat="assignment in assignments"
                 ng-init="course = assignment[0]; classes = assignment[1]">
