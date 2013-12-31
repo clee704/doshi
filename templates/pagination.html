@@ -1,0 +1,8 @@
+<div class="view-pagination clearfix hidden-print">
+  <a ng-if="page.prevPage" ng-href="/#{{page.prevPage.path}}" remove-outline="" class="btn btn-link pull-left">
+    이전 - {{page.prevPage.title}}
+  </a>
+  <a ng-if="page.nextPage" ng-href="/#{{page.nextPage.path}}" remove-outline="" class="btn btn-primary pull-right">
+    다음 - {{page.nextPage.title}}
+  </a>
+</div>

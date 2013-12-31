@@ -1,0 +1,79 @@
+<div class="alert alert-info">
+  1. 교과목과 반을 입력해 주세요.
+  <a href="#" class="alert-link" ng-click="loadExample(); $event.preventDefault()">예시 데이터 불러오기</a>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <form class="form-horizontal input-courses-and-classes" ng-submit="addCourse()">
+      <div class="form-group">
+        <label for="add-course" class="col-sm-4 control-label">교과목</label>
+        <div class="col-sm-8">
+          <div class="input-group">
+            <input class="form-control" type="text" id="add-course" ng-model="newCourse">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="addCourse()" remove-outline="">
+                +
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-12">
+          <ul class="list-group">
+            <li class="list-group-item" ng-repeat="course in courses">
+              <div class="list-group-item-inner">
+                {{course}}
+                <button type="button" class="close" ng-click="removeCourse(course)" remove-outline="">
+                  &times;
+                </button>
+              </div>
+            </li>
+            <li class="list-group-item empty text-muted" ng-if="!courses.length">
+              <div class="list-group-item-inner">
+                입력된 교과목이 없습니다.
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-sm-6">
+    <form class="form-horizontal input-courses-and-classes" ng-submit="addClass()">
+      <div class="form-group">
+        <label for="add-class" class="col-sm-4 control-label">반</label>
+        <div class="col-sm-8">
+          <div class="input-group">
+            <input class="form-control" type="text" id="add-class" ng-model="newClass">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="addClass()" remove-outline="">
+                +
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-12">
+          <ul class="list-group">
+            <li class="list-group-item" ng-repeat="klass in classes">
+              <div class="list-group-item-inner">
+                {{klass}}
+                <button type="button" class="close" ng-click="removeClass(klass)" remove-outline="">
+                  &times;
+                </button>
+              </div>
+            </li>
+            <li class="list-group-item empty text-muted" ng-if="!classes.length">
+              <div class="list-group-item-inner">
+                입력된 반이 없습니다.
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div ng-include="'templates/pagination.html'"></div>

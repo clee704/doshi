@@ -1,0 +1,8 @@
+<ul class="nav nav-pills nav-justified hidden-print">
+  <li ng-repeat="p in pages" ng-class="{active: p.path == path}">
+    <a ng-href="/#{{p.path}}" remove-outline="">
+      {{p.title}}
+      <span class="notch-wrapper"><span class="notch" ng-if="!$last"></span></span>
+    </a>
+  </li>
+</ul>

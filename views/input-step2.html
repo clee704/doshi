@@ -1,0 +1,29 @@
+<div class="alert alert-info">
+  2. 시간표의 각 시간별로 도움반 수업이 필요한 반을 선택해 주세요.
+</div>
+<table class="table table-bordered timetable input-timetable">
+  <thead>
+    <tr>
+      <th></th>
+      <th>월</th>
+      <th>화</th>
+      <th>수</th>
+      <th>목</th>
+      <th>금</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="i in periodIndices">
+      <th>{{i + 1}}<span class="hidden-xs">교시</span></th>
+      <td ng-repeat="j in dayIndices" ng-init="timeInfo = inputTimetable[j][i]">
+        <div class="classes">
+          <div class="class" ng-repeat="klass in timeInfo[0]">{{klass}}</div>
+        </div>
+        <div class="courses">
+          <div class="course" ng-repeat="course in timeInfo[1]">{{course}}</div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div ng-include="'templates/pagination.html'"></div>

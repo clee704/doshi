@@ -1,0 +1,102 @@
+<div class="alert alert-warning" ng-if="status.emptyInput">
+  시간표를 만들려면 시간 정보를 입력하셔야 합니다.
+</div>
+<div class="alert alert-info hidden-print" ng-if="status.showHelp &amp;&amp; !status.emptyInput">
+  버튼을 누르면 시간표 만들기를 시작합니다.
+  컴퓨터 사양에 따라 1분에서 5분 정도 걸릴 수 있습니다.
+</div>
+<div skip-ng-animate="">
+  <div class="output-controls hidden-print" ng-if="!status.emptyInput">
+    <button class="btn btn-success" ng-click="start()" remove-outline="" ng-if="!status.running &amp;&amp; (!status.paused || status.inputChanged)">
+      <span ng-if="!(status.paused || status.inputChanged || timetable.length)">시간표 만들기</span>
+      <span ng-if="status.inputChanged">바뀐 설정으로 시간표 만들기</span>
+      <span ng-if="!(status.paused || status.inputChanged || !timetable.length)">새 시간표 만들기</span>
+    </button>
+    <button class="btn btn-default" ng-click="pause()" remove-outline="" ng-if="status.running">일시 정지</button>
+    <button class="btn btn-default" ng-click="resume()" remove-outline="" ng-if="status.paused &amp;&amp; !status.finished">실행 재개</button>
+    <i class="fa fa-spinner fa-spin" ng-if="status.running"></i>
+  </div>
+</div>
+<div progress-bar="" model="status.progress.percent" ng-if="status.running || status.paused"></div>
+<div class="alert alert-warning" ng-if="timetable.length &amp;&amp; status.inputChanged">
+  아래 시간표는 과거에 만들어진 것입니다. 시간표를 만들었을 당시의 설정값은 현재 설정값과 다를 수 있습니다.
+</div>
+<div ng-if="timetable.length">
+  <table class="table table-bordered timetable output-timetable">
+    <thead>
+      <tr>
+        <th></th>
+        <th>월</th>
+        <th>화</th>
+        <th>수</th>
+        <th>목</th>
+        <th>금</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="j in periodIndices">
+        <th>{{j + 1}}<span class="hidden-xs">교시</span></th>
+        <td ng-repeat="i in dayIndices" ng-init="assignments = timetable[i][j]">
+          <table class="course-classes" maximize-height="" watch="timetable">
+            <tr ng-repeat="assignment in assignments" ng-init="course = assignment[0]; classes = assignment[1]">
+              <td ng-class="{highlight: isHighlighted[i][j][$index]}">
+                <div class="course" ng-click="highlightCourse(course); $event.stopPropagation()" ng-class="{highlight: course == highlightedCourse}">
+                  {{course}}
+                </div>
+                <div class="classes">
+                  <div class="class" ng-repeat="klass in classes" ng-click="highlightClass(klass); $event.stopPropagation()" ng-class="{highlight: klass == highlightedClass}">
+                    {{klass}}
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h2>수업 시간 통계</h2>
+  <div class="row">
+    <div class="col-sm-6">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th></th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+            <th>금</th>
+            <th>합계</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(course, days) in timetableStats.daysByCourse">
+            <th>{{course}}</th>
+            <td ng-repeat="(day, hours) in days">{{hours}}</td>
+            <td>{{timetableStats.sumDaysByCourse[course]}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-6">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th></th>
+            <th ng-repeat="(course, _) in timetableStats.daysByCourse">{{course}}</th>
+            <th>합계</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(klass, courses) in timetableStats.coursesByClass">
+            <th>{{klass}}</th>
+            <td ng-repeat="(course, hours) in courses">{{hours}}</td>
+            <td>{{timetableStats.sumCoursesByClass[klass]}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div ng-include="'templates/pagination.html'"></div>
