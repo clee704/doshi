@@ -44,7 +44,7 @@
           <table class="course-classes" maximize-height watch="timetable">
             <tr ng-repeat="assignment in assignments"
                 ng-init="course = assignment[0]; classes = assignment[1]">
-              <td ng-class="{highlight: isHighlighted[i][j][$index]}">
+              <td ng-class="{highlight: assignment.isHighlighted}">
                 <div class="course"
                      ng-click="highlightCourse(course); $event.stopPropagation()"
                      ng-class="{highlight: course == highlightedCourse}">
