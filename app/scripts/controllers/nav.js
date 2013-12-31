@@ -29,7 +29,7 @@ angular.module('doshi')
       });
   })
 
-  .controller('NavCtrl', function ($scope, $location, $route) {
+  .controller('NavCtrl', function ($scope, $location) {
     $scope.pages = [
       {path: '/', title: '교과목/반 입력'},
       {path: '/input-times', title: '시간 입력'},
