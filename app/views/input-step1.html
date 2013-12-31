@@ -1,7 +1,12 @@
 <div class="alert alert-info">
-  1. 교과목과 반을 입력해 주세요.
-  <a href="#" class="alert-link"
-     ng-click="loadExample(); $event.preventDefault()">예시 데이터 불러오기</a>
+  <p>교과목과 반을 입력해 주세요.</p>
+  <p>
+    도움반에서 가르치는 교과목과 도움반 학생이 소속된 일반 학급을 입력하시면 됩니다.
+    어떻게 해야할지 잘 모르시겠다면
+    <a href="#" class="alert-link"
+       ng-click="loadExample(); $event.preventDefault()">예시 데이터 불러오기</a>를
+    눌러 프로그램이 어떤 식으로 작동하는지 알아보세요.
+  </p>
 </div>
 <div class="row">
   <div class="col-sm-6">
@@ -10,7 +15,8 @@
         <label for="add-course" class="col-sm-4 control-label">교과목</label>
         <div class="col-sm-8">
           <div class="input-group">
-            <input class="form-control" type="text" id="add-course" ng-model="newCourse">
+            <input class="form-control" type="text" id="add-course" placeholder="예) 국어"
+                   ng-model="newCourse">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" ng-click="addCourse()" remove-outline>
                 +
@@ -46,7 +52,8 @@
         <label for="add-class" class="col-sm-4 control-label">반</label>
         <div class="col-sm-8">
           <div class="input-group">
-            <input class="form-control" type="text" id="add-class" ng-model="newClass">
+            <input class="form-control" type="text" id="add-class" placeholder="예) 1-1"
+                   ng-model="newClass">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" ng-click="addClass()" remove-outline>
                 +
