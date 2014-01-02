@@ -429,7 +429,8 @@ module.exports = function (grunt) {
         runnerPort: 9999
       },
       continuous: {
-        singleRun: true
+        singleRun: true,
+        browsers: ['Firefox']
       }
     }
   });
