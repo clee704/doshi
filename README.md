@@ -1,6 +1,8 @@
 Doshi
 =====
 
+[![Build Status](https://travis-ci.org/clee704/doshi.png)](https://travis-ci.org/clee704/doshi)
+
 Doshi is an HTML5-based timetable scheduler for special classes. Supports
 Firefox, Chrome, Safari, Internet Explorer (10 or later).
 
