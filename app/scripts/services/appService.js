@@ -155,6 +155,7 @@ angular.module('doshi')
           if (!courses) return;
           angular.copy(courses.filter(isNotRemovedCourse), courses);
         });
+        delete problemArgs.courseHoursByCourse[course];
       }
     };
 

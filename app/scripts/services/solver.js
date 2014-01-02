@@ -30,7 +30,7 @@ angular.module('doshi')
         classes: problemArgs.classes,
         inputTimetable: problemArgs.inputTimetable,
         maxClasses: problemArgs.maxClasses,
-        courseHours: problemArgs.courseHours
+        courseHours: this._getCourseHours()
       };
       try {
         this.problem = new Problem(args);
@@ -47,6 +47,43 @@ angular.module('doshi')
       this._startTime = time();
       this._resume();
       this._callback('started');
+    };
+
+    Solver.prototype._getCourseHours = function () {
+      // Select courseHours or courseHoursByCourse depending on provided values.
+      var courseHoursByCourse = problemArgs.courseHoursByCourse;
+      var useObj = false;
+      var values = [];
+      var sum = 0;
+      var course, v;
+      for (course in courseHoursByCourse) {
+        if (!courseHoursByCourse.hasOwnProperty(course)) continue;
+        v = courseHoursByCourse[course];
+        if (v !== undefined && v !== null) {
+          useObj = true;
+          values.push(v);
+          sum += v;
+        }
+      }
+      if (!useObj) {
+        // No specific values for each course.
+        return problemArgs.courseHours;
+      }
+      if (values.length === problemArgs.courses.length) {
+        // No missing values.
+        return courseHoursByCourse;
+      }
+      // Fill missing values with courseHours (if defined) or
+      // the average of existing values.
+      var fill = problemArgs.courseHours !== null ?
+          problemArgs.courseHours : Math.round(sum / values.length);
+      for (var i = 0; i < problemArgs.courses.length; i++) {
+        course = problemArgs.courses[i];
+        v = courseHoursByCourse[course];
+        if (v !== undefined && v !== null) continue;
+        courseHoursByCourse[course] = fill;
+      }
+      return courseHoursByCourse;
     };
 
     Solver.prototype._resume = function () {
