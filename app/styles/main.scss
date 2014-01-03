@@ -1,14 +1,16 @@
 @font-face {
-  font-family: 'NanumBarunGothic';
+  font-family: "NanumBarunGothic";
   font-style: normal;
   font-weight: 400;
-  src: url(/styles/fonts/NanumBarunGothic.ttf) format('truetype');
+  src: local("NanumBarunGothic"),
+       url(/styles/fonts/NanumBarunGothic.ttf) format("truetype");
 }
 @font-face {
-  font-family: 'NanumBarunGothic';
+  font-family: "NanumBarunGothic";
   font-style: normal;
   font-weight: 700;
-  src: url(/styles/fonts/NanumBarunGothicBold.ttf) format('truetype');
+  src: local("NanumBarunGothicBold"),
+       url(/styles/fonts/NanumBarunGothicBold.ttf) format("truetype");
 }
 
 $font-family-sans-serif: "Apple SD Gothic Neo", "NanumBarunGothic", 나눔바른고딕, "NanumGothic", "나눔고딕", "08SeoulNamsan", "08서울남산체", "Malgun Gothic", "맑은 고딕", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -17,10 +19,10 @@ $line-height-base: 1.5384615385; // 20/13
 $font-size-h1: 17px;
 $font-size-h2: 15px;
 // $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
-@import 'sass-bootstrap/lib/bootstrap';
+@import "sass-bootstrap/lib/bootstrap";
 
 $fa-font-path: "/bower_components/font-awesome/fonts";
-@import 'font-awesome/scss/font-awesome';
+@import "font-awesome/scss/font-awesome";
 
 body {
   padding: 20px 0 40px;
