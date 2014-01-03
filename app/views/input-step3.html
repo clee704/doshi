@@ -33,17 +33,19 @@
       </p>
     </div>
   </div>
-  <h2>교과목별 수업 시간</h2>
-  <p class="help-block">
-    각 교과목별로 주당 수업 시간을 설정합니다. 값을 지정하지 않으면 위에서 입력한 주당 수업 시간이
-    적용됩니다.
-  </p>
-  <div class="form-group" ng-repeat="course in problemArgs.courses">
-    <label for="course-hours-{{$index}}" class="col-sm-3 control-label">{{course}}</label>
-    <div class="col-sm-3">
-      <input type="number" id="course-hours" class="form-control" min="1" step="1"
-             pattern="\d*"
-             ng-model="problemArgs.courseHoursByCourse[course]">
+  <div ng-if="problemArgs.courses.length">
+    <h2>교과목별 수업 시간</h2>
+    <p class="help-block">
+      각 교과목별로 주당 수업 시간을 설정합니다. 값을 지정하지 않으면 위에서 입력한 주당 수업 시간이
+      적용됩니다.
+    </p>
+    <div class="form-group" ng-repeat="course in problemArgs.courses">
+      <label for="course-hours-{{$index}}" class="col-sm-3 control-label">{{course}}</label>
+      <div class="col-sm-3">
+        <input type="number" id="course-hours" class="form-control" min="1" step="1"
+               pattern="\d*"
+               ng-model="problemArgs.courseHoursByCourse[course]">
+      </div>
     </div>
   </div>
 </form>
