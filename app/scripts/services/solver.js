@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('doshi')
-  .factory('Solver', function (problemArgs, time) {
+  .factory('Solver', function (problemArgs, time, debug) {
 
     function Solver() {
       this._workers = [];
@@ -128,14 +128,14 @@ angular.module('doshi')
       if (this._minFitness === null || this.problem.compareFitness(fitness, this._minFitness) <= 0) {
         this._minFitness = fitness;
         this._bestTimetable = timetable;
-        this._debug();
+        if (debug) this._debug();
       }
       this._callback('progress', this._numSolved, this._numMaxRun);
       if (this._numSolved === this._numMaxRun) {
         this._pause();
         this._callback('solutionfound', this._minFitness,
             this.problem.convertTimetable(this._bestTimetable));
-        this._debug();
+        if (debug) this._debug();
       }
     };
 
