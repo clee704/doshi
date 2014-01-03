@@ -1,3 +1,5 @@
+// This script requires ImageMagick.
+
 var config = {
   app: 'app',
   images: 'app/images',
@@ -27,7 +29,6 @@ sizes.forEach(function (size) {
   });
 });
 
-// ImageMagick is required.
 function merge() {
   var args = ['convert'];
   sizes.forEach(function (size) {
