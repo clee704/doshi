@@ -255,16 +255,16 @@ module.exports = function (grunt) {
         }]
       }
     },
-    svgmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
+    // svgmin: {
+    //   dist: {
+    //     files: [{
+    //       expand: true,
+    //       cwd: '<%= yeoman.app %>/images',
+    //       src: '{,*/}*.svg',
+    //       dest: '<%= yeoman.dist %>/images'
+    //     }]
+    //   }
+    // },
     htmlmin: {
       dist: {
         options: {
@@ -280,7 +280,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.app %>',
-          src: ['*.html', 'views/*.html', 'templates/*.html'],
+          src: ['*.html'],
           dest: '<%= yeoman.dist %>'
         }]
       }
@@ -296,6 +296,17 @@ module.exports = function (grunt) {
           src: '*.js',
           dest: '.tmp/concat/scripts'
         }]
+      }
+    },
+
+    ngtemplates: {
+      doshi: {
+        cwd: '<%= yeoman.app %>',
+        src: ['templates/*.html', 'views/*.html'],
+        dest: '.tmp/templates.js',
+        options: {
+          usemin: 'scripts/scripts.js'
+        }
       }
     },
 
@@ -359,8 +370,6 @@ module.exports = function (grunt) {
         src: [
           'index.html',
           'favicon.ico',
-          'templates/*.html',
-          'views/*.html',
           'images/*.png',
           'styles/*.css',
           'styles/fonts/*',
@@ -387,7 +396,7 @@ module.exports = function (grunt) {
         'svg2png',
         'copy:styles',
         'imagemin',
-        'svgmin',
+        // 'svgmin',
         'htmlmin'
       ]
     },
@@ -472,6 +481,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'useminPrepare',
+    'ngtemplates',
     'concurrent:dist',
     'autoprefixer',
     'concat',
