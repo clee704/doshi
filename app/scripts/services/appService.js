@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('doshi')
-  .service('appService', function ($timeout, Solver, problemArgs, localStorage, NUM_DAYS, NUM_PERIODS) {
+  .service('appService', function ($window, $timeout, Solver, problemArgs, localStorage, NUM_DAYS, NUM_PERIODS) {
     var appService = this;
 
     this.version = 0;  // Used to invalidate old saved data
@@ -272,8 +272,8 @@ angular.module('doshi')
           appService.save();
         });
       },
-      unsolvableproblem: function (exception) {
-        console.log('unsolvable', exception);
+      unsolvableproblem: function (/*exception*/) {
+        $window.alert('조건에 맞는 시간표를 만들 수 없습니다. 최대 수업 크기를 늘리거나 제한을 없앤 뒤 다시 시도해보세요.');
       }
     };
     this.solver.on(callbacks);
