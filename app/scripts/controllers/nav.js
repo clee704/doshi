@@ -99,7 +99,7 @@ angular.module('doshi')
         if (!isEnter) {
           element.on('transitionend', function () {
             // Scroll so that the top of the slide is shown.
-            scrollTo('.view-wrapper');
+            scrollTo('.view-wrapper', {direction: 'upward'});
           });
         }
         done();
