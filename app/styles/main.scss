@@ -54,9 +54,7 @@ label {
 }
 
 .progress-bar {
-  &.transition-disabled {
-    @include transition(none);
-  }
+  @include transition(none);
 }
 
 span.hidden-xs {
@@ -387,4 +385,8 @@ span.hidden-xs {
   .fa-spinner {
     margin-left: 10px;
   }
+}
+
+.controls-progress-label {
+  margin-left: 10px;
 }

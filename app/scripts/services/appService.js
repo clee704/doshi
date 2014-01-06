@@ -13,9 +13,11 @@ angular.module('doshi')
       emptyInput: true,
       inputChanged: false,
       showHelp: true,
+      starting: false,
       running: false,
+      pausing: false,
       paused: false,
-      finished: false,
+      finished: true,
       progress: {
         current: 0,
         max: 0,
@@ -187,14 +189,39 @@ angular.module('doshi')
     };
 
     this.start = function () {
+      if (!(this.status.finished || this.status.paused)) return;
+      this.timetable.length = 0;
+      this.status.inputChanged = false;
+      this.status.showHelp = false;
+      this.status.starting = true;
+      this.status.running = false;
+      this.status.pausing = false;
+      this.status.paused = false;
+      this.status.finished = false;
+      this.status.progress.current = 0;
+      this.status.progress.max = 0;
+      this.status.progress.percent = 0;
       this.solver.start();
     };
 
     this.pause = function () {
+      if (!this.status.running) return;
+      this.status.starting = false;
+      this.status.running = false;
+      this.status.pausing = true;
+      this.status.paused = false;
+      this.status.finished = false;
       this.solver.pause();
     };
 
     this.resume = function () {
+      if (!this.status.paused) return;
+      this.status.showHelp = false;
+      this.status.starting = true;
+      this.status.running = false;
+      this.status.pausing = false;
+      this.status.paused = false;
+      this.status.finished = false;
       this.solver.resume();
     };
 
@@ -230,30 +257,32 @@ angular.module('doshi')
     var callbacks = {
       started: function () {
         $timeout(function () {
-          appService.timetable.length = 0;
-          status.inputChanged = false;
-          status.showHelp = false;
+          if (!status.starting) return;
+          status.starting = false;
           status.running = true;
+          status.pausing = false;
           status.paused = false;
           status.finished = false;
-          status.progress.current = 0;
-          status.progress.max = 0;
-          status.progress.percent = 0;
         });
       },
       resumed: function () {
         $timeout(function () {
-          status.showHelp = false;
+          if (!status.starting) return;
+          status.starting = false;
           status.running = true;
+          status.pausing = false;
           status.paused = false;
+          status.finished = false;
         });
       },
       paused: function () {
         $timeout(function () {
-          if (!status.finished) {
-            status.running = false;
-            status.paused = true;
-          }
+          if (!status.pausing) return;
+          status.starting = false;
+          status.running = false;
+          status.pausing = false;
+          status.paused = true;
+          status.finished = false;
         });
       },
       progress: function (numSolved, numMaxRun) {
@@ -265,7 +294,11 @@ angular.module('doshi')
       },
       solutionfound: function (fitness, timetable) {
         $timeout(function () {
+          if (!status.running) return;
+          status.starting = false;
           status.running = false;
+          status.pausing = false;
+          status.paused = false;
           status.finished = true;
           angular.copy(timetable, appService.timetable);
           buildTimetableStats();

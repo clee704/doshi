@@ -8,20 +8,28 @@
 </div>
 <div skip-ng-animate>
   <div class="controls hidden-print" ng-if="!status.emptyInput">
-    <button class="btn btn-success" ng-click="start()" remove-outline
-            ng-if="!status.running &amp;&amp; (!status.paused || status.inputChanged)">
-      <span ng-if="!(status.paused || status.inputChanged || timetable.length)">시간표 만들기</span>
+    <button class="btn btn-success" remove-outline
+            ng-if="status.finished || (status.paused &amp;&amp; status.inputChanged)"
+            ng-click="start()">
+      <span ng-if="!status.inputChanged &amp;&amp; !timetable.length">시간표 만들기</span>
+      <span ng-if="!status.inputChanged &amp;&amp; timetable.length">새 시간표 만들기</span>
       <span ng-if="status.inputChanged">바뀐 설정으로 시간표 만들기</span>
-      <span ng-if="!(status.paused || status.inputChanged || !timetable.length)">새 시간표 만들기</span>
     </button>
-    <button class="btn btn-default" ng-click="pause()" remove-outline
-            ng-if="status.running">일시 정지</button>
-    <button class="btn btn-default" ng-click="resume()" remove-outline
-            ng-if="status.paused &amp;&amp; !status.finished">실행 재개</button>
-    <i class="fa fa-spinner fa-spin" ng-if="status.running"></i>
+    <button class="btn btn-default" remove-outline
+            ng-if="status.starting || status.running"
+            ng-disabled="status.starting"
+            ng-click="pause()">일시 정지</button>
+    <button class="btn btn-default" remove-outline
+            ng-if="status.pausing || status.paused"
+            ng-disabled="status.pausing"
+            ng-click="resume()">실행 재개</button>
+    <span class="controls-progress-label" ng-if="!status.finished">
+      {{status.progress.percent | number:1}}% 완료
+    </span>
+    <i class="fa fa-spinner fa-spin" ng-if="status.starting || status.running || status.pausing"></i>
   </div>
 </div>
-<div progress-bar model="status.progress.percent" ng-if="status.running || status.paused"></div>
+<div progress-bar model="status.progress.percent" ng-if="!status.finished"></div>
 <div class="alert alert-warning" ng-if="timetable.length &amp;&amp; status.inputChanged">
   아래 시간표는 과거에 만들어진 것입니다. 시간표를 만들었을 당시의 설정값은 현재 설정값과 다를 수 있습니다.
 </div>

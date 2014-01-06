@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('doshi')
-  .factory('Solver', function (problemArgs, time, debug) {
+  .factory('Solver', function ($timeout, problemArgs, time, debug) {
 
     function Solver() {
       this._workers = [];
@@ -45,8 +45,7 @@ angular.module('doshi')
       this._minFitness = null;
       this._bestTimetable = null;
       this._startTime = time();
-      this._resume();
-      this._callback('started');
+      this._resume('started');
     };
 
     Solver.prototype._getCourseHours = function () {
@@ -86,16 +85,26 @@ angular.module('doshi')
       return courseHoursByCourse;
     };
 
-    Solver.prototype._resume = function () {
-      for (var i = 0; i < this._workers.length; i++) {
-        this._workers[i].call('start');
+    Solver.prototype._resume = function (eventName) {
+      // Start workers with random gaps between starting times.
+      // This makes the transition of progress values more smooth and natural.
+      var solver = this;
+      var i = 0;
+      function start() {
+        solver._workers[i].call('start');
+        i += 1;
+        solver._numRunningWorkers++;
+        if (i < solver._workers.length) {
+          $timeout(start, 200 + Math.random() * 800);
+        } else {
+          solver._callback(eventName);
+        }
       }
-      this._numRunningWorkers = this._workers.length;
+      start();
     };
 
     Solver.prototype.resume = function () {
-      this._resume();
-      this._callback('resumed');
+      this._resume('resumed');
     };
 
     Solver.prototype.pause = function () {
