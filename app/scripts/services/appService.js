@@ -5,11 +5,11 @@ angular.module('doshi')
   .service('appService', function ($window, $timeout, Solver, problemArgs, localStorage, NUM_DAYS, NUM_PERIODS) {
     var appService = this;
 
-    this.version = 0;  // Used to invalidate old saved data
-    this.days = range(NUM_DAYS);
-    this.periods = range(NUM_PERIODS);
-    this.solver = new Solver();
-    this.status = {
+    appService.version = 0;  // Used to invalidate old saved data
+    appService.days = range(NUM_DAYS);
+    appService.periods = range(NUM_PERIODS);
+    appService.solver = new Solver();
+    var status = appService.status = {
       emptyInput: true,
       inputChanged: false,
       showHelp: true,
@@ -24,12 +24,12 @@ angular.module('doshi')
         percent: 0
       }
     };
-    this.timetable = [];
-    this.timetableStats = {
+    appService.timetable = [];
+    appService.timetableStats = {
       daysByCourse: {},
       coursesByClass: {}
     };
-    this.exampleData = {
+    appService.exampleData = {
       courses: ['국어', '수학', '직업', '체육'],
       classes: ['1-3', '1-4', '2-2', '2-7', '3-6', '3-7'],
       inputTimetable: [
@@ -84,61 +84,61 @@ angular.module('doshi')
       courseHoursByCourse: {}
     };
 
-    this.loadExample = function () {
-      angular.copy(this.exampleData.courses, problemArgs.courses);
-      angular.copy(this.exampleData.classes, problemArgs.classes);
-      angular.copy(this.exampleData.inputTimetable, problemArgs.inputTimetable);
-      this.status.emptyInput = isDeepEmpty(problemArgs.inputTimetable);
-      problemArgs.maxClasses = this.exampleData.maxClasses;
-      problemArgs.courseHours = this.exampleData.courseHours;
-      angular.copy(this.exampleData.courseHoursByCourse, problemArgs.courseHoursByCourse);
+    appService.loadExample = function () {
+      angular.copy(appService.exampleData.courses, problemArgs.courses);
+      angular.copy(appService.exampleData.classes, problemArgs.classes);
+      angular.copy(appService.exampleData.inputTimetable, problemArgs.inputTimetable);
+      appService.status.emptyInput = isDeepEmpty(problemArgs.inputTimetable);
+      problemArgs.maxClasses = appService.exampleData.maxClasses;
+      problemArgs.courseHours = appService.exampleData.courseHours;
+      angular.copy(appService.exampleData.courseHoursByCourse, problemArgs.courseHoursByCourse);
     };
 
-    this.onDataChange = function (value, oldValue) {
+    appService.onDataChange = function (value, oldValue) {
       if (value === oldValue) return;
-      this.status.emptyInput = isDeepEmpty(problemArgs.inputTimetable);
-      if (this.timetable.length || this.status.running || this.status.paused) {
-        this.status.inputChanged = true;
+      status.emptyInput = isDeepEmpty(problemArgs.inputTimetable);
+      if (appService.timetable.length || status.running || status.paused) {
+        status.inputChanged = true;
       }
-      this.save();
-    }.bind(this);
+      appService.save();
+    };
 
-    this.save = function () {
+    appService.save = function () {
       var data = {
-        version: this.version,
-        status: this.status,
-        timetable: this.timetable,
-        timetableStats: this.timetableStats,
+        version: appService.version,
+        status: appService.status,
+        timetable: appService.timetable,
+        timetableStats: appService.timetableStats,
         problemArgs: problemArgs
       };
       localStorage.dump('doshiSavedData', data);
     };
 
-    this.load = function () {
+    appService.load = function () {
       var savedData = localStorage.load('doshiSavedData');
       if (savedData === null) {
         // Nothing saved or parse failed.
         return;
       }
-      if (savedData.version !== this.version) {
+      if (savedData.version !== appService.version) {
         // Old saved data
         localStorage.removeItem('doshiSavedData');
         return;
       }
       angular.copy(savedData.problemArgs, problemArgs);
-      angular.copy(savedData.timetable, this.timetable);
-      angular.copy(savedData.timetableStats, this.timetableStats);
-      this.status.emptyInput = savedData.status.emptyInput;
-      this.status.inputChanged = savedData.status.inputChanged;
-      this.status.showHelp = savedData.status.showHelp;
-      if (!this.timetable.length) {
+      angular.copy(savedData.timetable, appService.timetable);
+      angular.copy(savedData.timetableStats, appService.timetableStats);
+      appService.status.emptyInput = savedData.status.emptyInput;
+      appService.status.inputChanged = savedData.status.inputChanged;
+      appService.status.showHelp = savedData.status.showHelp;
+      if (!appService.timetable.length) {
         // inputChanged can be true if input was changed during searching.
         // It should be false when reloaded if timetable is empty.
-        this.status.inputChanged = false;
+        appService.status.inputChanged = false;
       }
     };
 
-    this.addCourse = function (course) {
+    appService.addCourse = function (course) {
       if (!course) return;
       if (problemArgs.courses.indexOf(course) === -1) {
         problemArgs.courses.push(course);
@@ -146,13 +146,13 @@ angular.module('doshi')
       }
     };
 
-    this.removeCourse = function (course) {
+    appService.removeCourse = function (course) {
       var index = problemArgs.courses.indexOf(course);
       if (index !== -1) {
         problemArgs.courses.splice(index, 1);
         // Remove data containing the removed course from inputTimetable.
         var isNotRemovedCourse = function (x) { return course !== x; };
-        this.forEachInputCell(function (cell) {
+        appService.forEachInputCell(function (cell) {
           var courses = cell[1];
           if (!courses) return;
           angular.copy(courses.filter(isNotRemovedCourse), courses);
@@ -161,7 +161,7 @@ angular.module('doshi')
       }
     };
 
-    this.addClass = function (klass) {
+    appService.addClass = function (klass) {
       if (!klass) return;
       if (problemArgs.classes.indexOf(klass) === -1) {
         problemArgs.classes.push(klass);
@@ -169,13 +169,13 @@ angular.module('doshi')
       }
     };
 
-    this.removeClass = function (klass) {
+    appService.removeClass = function (klass) {
       var index = problemArgs.classes.indexOf(klass);
       if (index !== -1) {
         problemArgs.classes.splice(index, 1);
         // Remove data containing the removed class from inputTimetable
         var isNotRemovedClass = function (x) { return klass !== x; };
-        this.forEachInputCell(function (cell) {
+        appService.forEachInputCell(function (cell) {
           var classes = cell[0];
           if (!classes) return;
           angular.copy(classes.filter(isNotRemovedClass), classes);
@@ -188,44 +188,44 @@ angular.module('doshi')
       }
     };
 
-    this.start = function () {
-      if (!(this.status.finished || this.status.paused)) return;
-      this.timetable.length = 0;
-      this.status.inputChanged = false;
-      this.status.showHelp = false;
-      this.status.starting = true;
-      this.status.running = false;
-      this.status.pausing = false;
-      this.status.paused = false;
-      this.status.finished = false;
-      this.status.progress.current = 0;
-      this.status.progress.max = 0;
-      this.status.progress.percent = 0;
-      this.solver.start();
+    appService.start = function () {
+      if (!(status.finished || status.paused)) return;
+      appService.timetable.length = 0;
+      status.inputChanged = false;
+      status.showHelp = false;
+      status.starting = true;
+      status.running = false;
+      status.pausing = false;
+      status.paused = false;
+      status.finished = false;
+      status.progress.current = 0;
+      status.progress.max = 0;
+      status.progress.percent = 0;
+      appService.solver.start();
     };
 
-    this.pause = function () {
-      if (!this.status.running) return;
-      this.status.starting = false;
-      this.status.running = false;
-      this.status.pausing = true;
-      this.status.paused = false;
-      this.status.finished = false;
-      this.solver.pause();
+    appService.pause = function () {
+      if (!status.running) return;
+      status.starting = false;
+      status.running = false;
+      status.pausing = true;
+      status.paused = false;
+      status.finished = false;
+      appService.solver.pause();
     };
 
-    this.resume = function () {
-      if (!this.status.paused) return;
-      this.status.showHelp = false;
-      this.status.starting = true;
-      this.status.running = false;
-      this.status.pausing = false;
-      this.status.paused = false;
-      this.status.finished = false;
-      this.solver.resume();
+    appService.resume = function () {
+      if (!status.paused) return;
+      status.showHelp = false;
+      status.starting = true;
+      status.running = false;
+      status.pausing = false;
+      status.paused = false;
+      status.finished = false;
+      appService.solver.resume();
     };
 
-    this.forEachInputCell = function (callback) {
+    appService.forEachInputCell = function (callback) {
       for (var day = 0; day < problemArgs.inputTimetable.length; day++) {
         var column = problemArgs.inputTimetable[day];
         if (!column) continue;
@@ -237,9 +237,9 @@ angular.module('doshi')
       }
     };
 
-    this.forEachAssignment = function (callback) {
-      for (var day = 0; day < this.timetable.length; day++) {
-        var column = this.timetable[day];
+    appService.forEachAssignment = function (callback) {
+      for (var day = 0; day < appService.timetable.length; day++) {
+        var column = appService.timetable[day];
         if (!column) continue;
         for (var period = 0; period < column.length; period++) {
           var assignments = column[period];
@@ -253,8 +253,7 @@ angular.module('doshi')
       }
     };
 
-    var status = this.status;
-    var callbacks = {
+    appService.solver.on({
       started: function () {
         $timeout(function () {
           if (!status.starting) return;
@@ -308,8 +307,7 @@ angular.module('doshi')
       unsolvableproblem: function (/*exception*/) {
         $window.alert('조건에 맞는 시간표를 만들 수 없습니다. 최대 수업 크기를 늘리거나 제한을 없앤 뒤 다시 시도해보세요.');
       }
-    };
-    this.solver.on(callbacks);
+    });
 
     function buildTimetableStats() {
       var zero = function () { return 0; };
@@ -337,5 +335,5 @@ angular.module('doshi')
       angular.copy(stats, appService.timetableStats);
     }
 
-    this.load();
+    appService.load();
   });
