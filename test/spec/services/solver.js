@@ -9,7 +9,6 @@ describe('solver', function () {
   beforeEach(inject(function (_problemArgs_, Solver) {
     problemArgs = _problemArgs_;
     problemArgs.courses = ['Math', 'Science'];
-    Solver.prototype._onError = function () {};
     solver = new Solver();
   }));
 

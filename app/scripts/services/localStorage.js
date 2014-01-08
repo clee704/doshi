@@ -36,7 +36,7 @@ angular.module('doshi')
       return backend.setItem(key, angular.toJson(obj));
     };
 
-    this.load = function (key) {
+    this.load = function (key, defaultValue) {
       var jsonString = backend.getItem(key);
       if (jsonString !== null) {
         try {
@@ -45,6 +45,6 @@ angular.module('doshi')
           // invalid json string; return null
         }
       }
-      return null;
+      return defaultValue !== undefined ? defaultValue : null;
     };
   });

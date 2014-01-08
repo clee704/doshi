@@ -15,14 +15,22 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  var replaceFiles = [{
+    expand: true,
+    cwd: '<%= doshi.app %>',
+    src: ['{,*/}*.html', 'scripts/{,*/}*.js'],
+    dest: '.tmp'
+  }];
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
     // Project settings
-    yeoman: {
+    doshi: {
       // configurable paths
       app: require('./bower.json').appPath || 'app',
-      dist: 'dist'
+      dist: 'dist',
+      domain: 'doshi.clee.kr'
     },
 
     // Watches files for changes and runs tasks based on the changed files
@@ -31,7 +39,7 @@ module.exports = function (grunt) {
         spawn: false
       },
       js: {
-        files: ['{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js'],
+        files: ['.tmp/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all', 'karma:background:run']
       },
       jsTest: {
@@ -39,15 +47,22 @@ module.exports = function (grunt) {
         tasks: ['newer:jshint:test', 'karma:background:run']
       },
       compass: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+        files: ['<%= doshi.app %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
       },
       svg2png: {
-        files: ['<%= yeoman.app %>/images/*.svg'],
+        files: ['<%= doshi.app %>/images/*.svg'],
         tasks: ['newer:svg2png']
       },
+      replace: {
+        files: [
+          '<%= doshi.app %>/{,*/}*.html',
+          '<%= doshi.app %>/scripts/{,*/}*.js'
+        ],
+        tasks: ['replace:dev', 'newer:jshint:all', 'karma:background:run']
+      },
       styles: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
+        files: ['<%= doshi.app %>/styles/{,*/}*.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
       },
       gruntfile: {
@@ -58,9 +73,9 @@ module.exports = function (grunt) {
       //     livereload: '<%= connect.options.livereload %>'
       //   },
       //   files: [
-      //     '<%= yeoman.app %>/{,*/}*.html',
+      //     '<%= doshi.app %>/{,*/}*.html',
       //     '.tmp/styles/{,*/}*.css',
-      //     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+      //     '<%= doshi.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
       //   ]
       // }
     },
@@ -78,7 +93,7 @@ module.exports = function (grunt) {
       //     open: true,
       //     base: [
       //       '.tmp',
-      //       '<%= yeoman.app %>'
+      //       '<%= doshi.app %>'
       //     ]
       //   }
       // },
@@ -88,13 +103,13 @@ module.exports = function (grunt) {
           base: [
             '.tmp',
             'test',
-            '<%= yeoman.app %>'
+            '<%= doshi.app %>'
           ]
         }
       },
       dist: {
         options: {
-          base: '<%= yeoman.dist %>'
+          base: '<%= doshi.dist %>'
         }
       }
     },
@@ -107,7 +122,7 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/scripts/{,*/}*.js'
+        '.tmp/scripts/{,*/}*.js'
       ],
       test: {
         options: {
@@ -124,8 +139,8 @@ module.exports = function (grunt) {
           dot: true,
           src: [
             '.tmp',
-            '<%= yeoman.dist %>/*',
-            '!<%= yeoman.dist %>/.git*'
+            '<%= doshi.dist %>/*',
+            '!<%= doshi.dist %>/.git*'
           ]
         }]
       },
@@ -153,13 +168,13 @@ module.exports = function (grunt) {
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
-        sassDir: '<%= yeoman.app %>/styles',
+        sassDir: '<%= doshi.app %>/styles',
         cssDir: '.tmp/styles',
         generatedImagesDir: '.tmp/images/generated',
-        imagesDir: '<%= yeoman.app %>/images',
-        javascriptsDir: '<%= yeoman.app %>/scripts',
-        fontsDir: '<%= yeoman.app %>/styles/fonts',
-        importPath: '<%= yeoman.app %>/bower_components',
+        imagesDir: '<%= doshi.app %>/images',
+        javascriptsDir: '.tmp/scripts',
+        fontsDir: '<%= doshi.app %>/styles/fonts',
+        importPath: '<%= doshi.app %>/bower_components',
         httpImagesPath: '/images',
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/styles/fonts',
@@ -169,7 +184,7 @@ module.exports = function (grunt) {
       },
       dist: {
         options: {
-          generatedImagesDir: '<%= yeoman.dist %>/images/generated'
+          generatedImagesDir: '<%= doshi.dist %>/images/generated'
         }
       },
       server: {
@@ -183,7 +198,7 @@ module.exports = function (grunt) {
       all: {
         files: [{
           src: [
-            '<%= yeoman.app %>/images/icon-*.svg'
+            '<%= doshi.app %>/images/icon-*.svg'
           ],
           dest: '.tmp/images'
         }]
@@ -195,10 +210,10 @@ module.exports = function (grunt) {
       dist: {
         files: {
           src: [
-            '<%= yeoman.dist %>/scripts/{,*/}*.js',
-            '<%= yeoman.dist %>/styles/{,*/}*.css',
-            '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.dist %>/styles/fonts/*'
+            '<%= doshi.dist %>/scripts/{,*/}*.js',
+            '<%= doshi.dist %>/styles/{,*/}*.css',
+            '<%= doshi.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%= doshi.dist %>/styles/fonts/*'
           ]
         }
       }
@@ -208,23 +223,23 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: '<%= yeoman.app %>/index.html',
+      html: '.tmp/index.html',
       options: {
-        dest: '<%= yeoman.dist %>'
+        dest: '<%= doshi.dist %>'
       }
     },
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.dist %>/{,*/}*.html'],
-      css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+      html: ['<%= doshi.dist %>/{,*/}*.html'],
+      css: ['<%= doshi.dist %>/styles/{,*/}*.css'],
       js: [
-        '<%= yeoman.dist %>/scripts/{,*/}*.js',
-        '!<%= yeoman.dist %>/scripts/*worker.js'
+        '<%= doshi.dist %>/scripts/{,*/}*.js',
+        '!<%= doshi.dist %>/scripts/*worker.js'
       ],
-      worker: ['<%= yeoman.dist %>/scripts/*worker.js'],
+      worker: ['<%= doshi.dist %>/scripts/*worker.js'],
       options: {
-        assetsDirs: ['<%= yeoman.dist %>'],
+        assetsDirs: ['<%= doshi.dist %>'],
         patterns: {
           js: [
             [
@@ -249,9 +264,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>/images',
+          cwd: '<%= doshi.app %>/images',
           src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/images'
+          dest: '<%= doshi.dist %>/images'
         }]
       }
     },
@@ -259,9 +274,9 @@ module.exports = function (grunt) {
     //   dist: {
     //     files: [{
     //       expand: true,
-    //       cwd: '<%= yeoman.app %>/images',
+    //       cwd: '<%= doshi.app %>/images',
     //       src: '{,*/}*.svg',
-    //       dest: '<%= yeoman.dist %>/images'
+    //       dest: '<%= doshi.dist %>/images'
     //     }]
     //   }
     // },
@@ -279,9 +294,9 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>',
+          cwd: '.tmp',
           src: ['*.html'],
-          dest: '<%= yeoman.dist %>'
+          dest: '<%= doshi.dist %>'
         }]
       }
     },
@@ -301,7 +316,7 @@ module.exports = function (grunt) {
 
     ngtemplates: {
       doshi: {
-        cwd: '<%= yeoman.app %>',
+        cwd: '.tmp',
         src: ['templates/*.html', 'views/*.html'],
         dest: '.tmp/templates.js',
         options: {
@@ -313,7 +328,43 @@ module.exports = function (grunt) {
     // Replace Google CDN references
     cdnify: {
       dist: {
-        html: ['<%= yeoman.dist %>/*.html']
+        html: ['<%= doshi.dist %>/*.html']
+      }
+    },
+
+    replace: {
+      options: {
+        force: true
+      },
+      dev: {
+        options: {
+          variables: {
+            'debug': 'true',
+            'production': 'false',
+            'domain': '<%= doshi.domain %>'
+          }
+        },
+        files: replaceFiles
+      },
+      test: {
+        options: {
+          variables: {
+            'debug': 'false',
+            'production': 'false',
+            'domain': '<%= doshi.domain %>'
+          }
+        },
+        files: replaceFiles
+      },
+      dist: {
+        options: {
+          variables: {
+            'debug': 'false',
+            'production': 'true',
+            'domain': '<%= doshi.domain %>'
+          }
+        },
+        files: replaceFiles
       }
     },
 
@@ -323,8 +374,8 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           dot: true,
-          cwd: '<%= yeoman.app %>',
-          dest: '<%= yeoman.dist %>',
+          cwd: '<%= doshi.app %>',
+          dest: '<%= doshi.dist %>',
           src: [
             '*.{ico,png,txt}',
             '.htaccess',
@@ -335,7 +386,7 @@ module.exports = function (grunt) {
         }, {
           expand: true,
           cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/images',
+          dest: '<%= doshi.dist %>/images',
           src: [
             'icon-*.png',
             'generated/*'
@@ -344,7 +395,7 @@ module.exports = function (grunt) {
       },
       styles: {
         expand: true,
-        cwd: '<%= yeoman.app %>/styles',
+        cwd: '<%= doshi.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
       }
@@ -353,7 +404,7 @@ module.exports = function (grunt) {
     manifest: {
       generate: {
         options: {
-          basePath: '<%= yeoman.dist %>',
+          basePath: '<%= doshi.dist %>',
           cache: [
             // Font Awesome add query strings when requesting font files.
             // These cannot be described in src.
@@ -376,7 +427,7 @@ module.exports = function (grunt) {
           // 'bower_components/sass-bootstrap/fonts/*',
           'scripts/*.js'
         ],
-        dest: '<%= yeoman.dist %>/manifest.appcache'
+        dest: '<%= doshi.dist %>/manifest.appcache'
       }
     },
 
@@ -407,9 +458,9 @@ module.exports = function (grunt) {
     // cssmin: {
     //   dist: {
     //     files: {
-    //       '<%= yeoman.dist %>/styles/main.css': [
+    //       '<%= doshi.dist %>/styles/main.css': [
     //         '.tmp/styles/{,*/}*.css',
-    //         '<%= yeoman.app %>/styles/{,*/}*.css'
+    //         '<%= doshi.app %>/styles/{,*/}*.css'
     //       ]
     //     }
     //   }
@@ -417,8 +468,8 @@ module.exports = function (grunt) {
     // uglify: {
     //   dist: {
     //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '<%= yeoman.dist %>/scripts/scripts.js'
+    //       '<%= doshi.dist %>/scripts/scripts.js': [
+    //         '<%= doshi.dist %>/scripts/scripts.js'
     //       ]
     //     }
     //   }
@@ -452,6 +503,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'replace:dev',
       'concurrent:server',
       'autoprefixer',
       // 'connect:livereload',
@@ -472,6 +524,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
+    'replace:test',
     'concurrent:test',
     'autoprefixer',
     'connect:test',
@@ -480,6 +533,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'replace:dist',
     'useminPrepare',
     'ngtemplates',
     'concurrent:dist',

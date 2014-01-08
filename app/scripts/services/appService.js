@@ -111,18 +111,18 @@ angular.module('doshi')
         timetableStats: appService.timetableStats,
         problemArgs: problemArgs
       };
-      localStorage.dump('doshiSavedData', data);
+      localStorage.dump('appService.savedData', data);
     };
 
     appService.load = function () {
-      var savedData = localStorage.load('doshiSavedData');
+      var savedData = localStorage.load('appService.savedData');
       if (savedData === null) {
         // Nothing saved or parse failed.
         return;
       }
       if (savedData.version !== appService.version) {
         // Old saved data
-        localStorage.removeItem('doshiSavedData');
+        localStorage.removeItem('appService.savedData');
         return;
       }
       angular.copy(savedData.problemArgs, problemArgs);

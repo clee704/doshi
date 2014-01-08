@@ -18,10 +18,10 @@ DoshiWorker.prototype.start = function () {
     if (!this.paused) {
       this.problem.initRandom();
       var fitness = hillClimbing(this.problem);
-      this._callParent('onResult', fitness, this.problem.timetable);
+      postMessage({method: 'onResult', args: [fitness, this.problem.timetable]});
       setTimeout(loop);
     } else {
-      this._callParent('onPaused');
+      postMessage({method: 'onPaused'});
     }
   }.bind(this);
   loop();
@@ -41,25 +41,15 @@ DoshiWorker.prototype._init = function () {
   }.bind(this), false);
 };
 
-DoshiWorker.prototype._callParent = function () {
-  var data = [].slice.apply(arguments);
-  var method = data[0];
-  var args = data.slice(1);
-  postMessage({method: method, args: args});
-};
-
 
 // This script is embedded in index.html for usemin to be able to process.
 // We should check if we are in normal context or in Worker context.
 if (typeof importScripts !== 'undefined') {
 
-  // Try to import the concatenated & minified file first (production)
-  // then the original files (development).
-  try {
+  if (@@production) {
     importScripts('lib.js');
-  } catch (exception) {
+  } else {
     importScripts('lib/util.js', 'lib/algorithm.js', 'lib/problem.js');
   }
-
   new DoshiWorker();
 }

@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="images/icon-76.png">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-    <!-- build:css({.tmp,app}) styles/main.css -->
+    <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
 </head>
@@ -29,10 +29,10 @@
       </p>
       <ul>
         <li>
-          <a href="http://www.mozilla.org/ko/firefox/new/">Firefox</a>
+          <a href="https://www.google.com/intl/ko/chrome/browser/">Chrome</a>
         </li>
         <li>
-          <a href="https://www.google.com/intl/ko/chrome/browser/">Chrome</a>
+          <a href="http://www.mozilla.org/ko/firefox/new/">Firefox</a>
         </li>
         <li>
           <a href="http://windows.microsoft.com/ko-kr/internet-explorer/download-ie">최신 버전의 Internet Explorer</a>.
@@ -55,11 +55,8 @@
     </div>
   </div>
 
-  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
    <script>
-    if (location.hostname !== '0.0.0.0' &&
-        location.hostname !== '127.0.0.1' &&
-        location.hostname !== 'localhost') {
+    if (@@production && location.hostname === '@@domain') {
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -68,15 +65,14 @@
       ga('create', 'UA-42947477-5', 'clee.kr');
       ga('send', 'pageview');
     }
-  </script>
 
-  <script>
+    // Remove 300ms delay on mobile browsers
     window.addEventListener('load', function () {
       FastClick.attach(document.body);
     });
   </script>
 
-    <!-- build:js scripts/vendor.js -->
+    <!-- build:js(app) scripts/vendor.js -->
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
@@ -84,13 +80,13 @@
     <script src="bower_components/fastclick/lib/fastclick.js"></script>
     <!-- endbuild -->
 
-    <!-- build:js({.tmp,app}) scripts/lib.js -->
+    <!-- build:js(.tmp) scripts/lib.js -->
     <script src="scripts/lib/util.js"></script>
     <script src="scripts/lib/algorithm.js"></script>
     <script src="scripts/lib/problem.js"></script>
     <!-- endbuild -->
 
-    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <!-- build:js(.tmp) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/inputStep1.js"></script>
     <script src="scripts/controllers/inputStep2.js"></script>
@@ -108,6 +104,7 @@
     <script src="scripts/services/getCssRule.js"></script>
     <script src="scripts/services/localStorage.js"></script>
     <script src="scripts/services/problemArgs.js"></script>
+    <script src="scripts/services/random.js"></script>
     <script src="scripts/services/screenclick.js"></script>
     <script src="scripts/services/scrollTo.js"></script>
     <script src="scripts/services/skipNgAnimate.js"></script>
@@ -115,7 +112,7 @@
     <script src="scripts/services/time.js"></script>
     <!-- endbuild -->
 
-    <!-- build:js({.tmp,app}) scripts/worker.js -->
+    <!-- build:js(.tmp) scripts/worker.js -->
     <script src="scripts/worker.js"></script>
     <!-- endbuild -->
 

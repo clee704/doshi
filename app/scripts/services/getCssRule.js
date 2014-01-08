@@ -6,7 +6,7 @@ angular.module('doshi')
   // The current implementation is just good enough for the current usage of
   // this function in this app. For example, it doesn't look into media rules,
   // so any rules that in media queries are not considered.
-  .factory('getCssRule', function ($window) {
+  .factory('getCssRule', function ($window, $log) {
     var styleElement = $window.document.createElement('style');
     $window.document.head.appendChild(styleElement);
     var styleSheet = styleElement.sheet;
@@ -35,6 +35,6 @@ angular.module('doshi')
           }
         }
       }
-      console.log('CSS rule for `' + selector + '` not found');
+      $log.warn('CSS rule for `' + selector + '` not found');
     };
   });

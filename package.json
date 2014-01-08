@@ -1,6 +1,10 @@
 {
   "name": "doshi",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/clee704/doshi.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -31,7 +35,8 @@
     "grunt-svg2png": "git://github.com/clee704/grunt-svg2png.git#39eb8ad52b7ce29ad9e650ad854c099f12d366ab",
     "svg2png": "~1.0.0",
     "grunt-manifest": "~0.4.0",
-    "grunt-angular-templates": "~0.5.1"
+    "grunt-angular-templates": "~0.5.1",
+    "grunt-replace": "~0.5.1"
   },
   "engines": {
     "node": ">=0.8.0"
