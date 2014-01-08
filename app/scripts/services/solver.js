@@ -242,7 +242,12 @@ angular.module('doshi')
           if (rate * manager._alpha > manager._rate) {
             nextState = manager._state;
             manager._scale = manager._workers.length;
-            manager._scaleDown();
+            if (manager._scale > 1) {
+              manager._scaleDown();
+            } else {
+              nextState = 'stable';
+              manager._updateProbabilities(0.93, 0.07, 0);
+            }
             manager._rate = rate;
           } else {
             nextState = 'stable';
