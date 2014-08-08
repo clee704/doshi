@@ -325,13 +325,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // Replace Google CDN references
-    cdnify: {
-      dist: {
-        html: ['<%= doshi.dist %>/*.html']
-      }
-    },
-
     replace: {
       options: {
         force: true
@@ -541,7 +534,6 @@ module.exports = function (grunt) {
     'concat',
     'ngmin',
     'copy:dist',
-    'cdnify',
     'cssmin',
     'uglify',
     'rev',
