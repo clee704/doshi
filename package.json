@@ -32,7 +32,7 @@
     "load-grunt-tasks": "~0.2.0",
     "time-grunt": "~0.2.1",
     "grunt-karma": "~0.6.2",
-    "grunt-svg2png": "git://github.com/clee704/grunt-svg2png.git#39eb8ad52b7ce29ad9e650ad854c099f12d366ab",
+    "grunt-svg2png": "0.2.5",
     "svg2png": "~1.0.0",
     "grunt-manifest": "~0.4.0",
     "grunt-angular-templates": "~0.5.1",
